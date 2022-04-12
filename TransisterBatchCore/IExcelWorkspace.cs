@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TransisterBatchCore
 {
@@ -10,6 +7,6 @@ namespace TransisterBatchCore
     {
         ActionResult Load(string path);
         ActionResult<List<string>> GetWorksheetNames();
-        ActionResult<TransistorBatch> LoadTransisterBatch(TransisterWorkSheetArgs workSheetArgs);
+        ActionResult<TransistorBatch> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs);
     }
 }

@@ -57,15 +57,16 @@ namespace TransistorBatchProcessor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            WriteFeedback($"Starting load transistor batch from [{comboBox1.SelectedItem?.ToString()}]...");
-            ActionResult<TransistorBatch> loadBatchResult = Workspace.LoadTransisterBatch( new TransisterWorkSheetArgs
+            TransistorBatchLoadArgs batchLoadArgs = new TransistorBatchLoadArgs
             {
                 Name = comboBox1.SelectedItem?.ToString()
-            });
+            };
+            WriteFeedback($"Starting load transistor batch from [{comboBox1.SelectedItem?.ToString()}]...");
+            ActionResult<TransistorBatch> loadBatchResult = Workspace.LoadTransisterBatch(batchLoadArgs);
             WriteFeedback(loadBatchResult.Message);
             if (loadBatchResult.Success)
             {
-                List<List<TransisterSettings>> batches = loadBatchResult.Data.Process();
+                List<List<TransisterSettings>> batches = loadBatchResult.Data.Process(batchLoadArgs);
                 foreach(List<TransisterSettings> batch in batches)
                 {
                     if (batch.Count == 1)

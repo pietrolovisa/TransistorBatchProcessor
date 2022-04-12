@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TransisterBatchCore
 {
@@ -17,11 +14,15 @@ namespace TransisterBatchCore
         {
         }
 
-        public List<List<TransisterSettings>> Process()
+        public List<List<TransisterSettings>> Process(TransistorBatchLoadArgs args)
         {
             List<List<TransisterSettings>> batches = this
-                .GroupBy(ts => ts, new ToleranceEqualityComparer())
+                .GroupBy(ts => ts, new ToleranceEqualityComparer
+                {
+                    BetaTolerance = args.BetaTolerance
+                })
                 .Select(grp => grp.ToList())
+                .OrderByDescending(grp => grp.Count)
                 .ToList();
             return batches;
         }
@@ -29,11 +30,12 @@ namespace TransisterBatchCore
 
     public class ToleranceEqualityComparer : IEqualityComparer<TransisterSettings>
     {
-        public double Tolerance { get; set; } = 0.001;
+        public double BetaTolerance { get; set; } = 0.001;
+
         public bool Equals(TransisterSettings x, TransisterSettings y)
         {
             return x.HFE == y.HFE &&
-                x.Beta - Tolerance <= y.Beta && x.Beta + Tolerance > y.Beta;
+                x.Beta - BetaTolerance <= y.Beta && x.Beta + BetaTolerance > y.Beta;
         }
 
         //This is to force the use of Equals methods.

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Collections.Generic;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 
 namespace TransisterBatchCore
 {
@@ -38,7 +35,6 @@ namespace TransisterBatchCore
         public ActionResult<List<string>> GetWorksheetNames()
         {
             ActionResult<List<string>> result = new ActionResult<List<string>>();
-            
             try
             {
                 result.Data = new List<string>();
@@ -54,7 +50,7 @@ namespace TransisterBatchCore
             return result;
         }
 
-        public ActionResult<TransistorBatch> LoadTransisterBatch(TransisterWorkSheetArgs workSheetArgs)
+        public ActionResult<TransistorBatch> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs)
         {
             ActionResult<TransistorBatch> result = new ActionResult<TransistorBatch>();
             try
