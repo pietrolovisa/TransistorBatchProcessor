@@ -111,19 +111,25 @@ namespace TransisterBatchCore
                     Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_outliers"));
                 outlierWorksheet.AddHeader(batchLoadArgs);
                 List<List<TransisterSettings>> batches = transistorBatchDiscovery.Discovery.Process(batchLoadArgs);
-                foreach (List<TransisterSettings> batch in batches)
+                List<List<TransisterSettings>> outlierBatches = batches
+                    .Where(b => b.Count == 1)
+                    .OrderBy(b => b[0].Key)
+                    .ToList();
+                foreach (List<TransisterSettings> outlierBatch in outlierBatches)
                 {
-                    if (batch.Count == 1)
+                    outlierWorksheet.AppendTransisterSettings(batchLoadArgs, outlierBatch[0], outlierIndex++);
+                }
+
+                List<List<TransisterSettings>> discoveryBatches = batches
+                    .Where(b => b.Count > 1)
+                    .OrderBy(b => b[0].Key)
+                    .ToList();
+                foreach (List<TransisterSettings> discoveryBatch in discoveryBatches)
+                {
+                    discoveryWorksheet.AddMatchHeader(discoveryBatch.Count, batchLoadArgs, discoveryIndex++);
+                    foreach (TransisterSettings match in discoveryBatch)
                     {
-                        outlierWorksheet.AppendTransisterSettings(batchLoadArgs, batch[0], outlierIndex++);
-                    }
-                    else if (batch.Count > 1)
-                    {
-                        discoveryWorksheet.AddMatchHeader(batch.Count, batchLoadArgs, discoveryIndex++);
-                        foreach (TransisterSettings match in batch)
-                        {
-                            discoveryWorksheet.AppendTransisterSettings(batchLoadArgs, match, discoveryIndex++);
-                        }
+                        discoveryWorksheet.AppendTransisterSettings(batchLoadArgs, match, discoveryIndex++);
                     }
                 }
                 Package.Save();

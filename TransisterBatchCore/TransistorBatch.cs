@@ -25,7 +25,8 @@ namespace TransisterBatchCore
             List<List<TransisterSettings>> batches = this
                 .GroupBy(ts => ts, new ToleranceEqualityComparer
                 {
-                    BetaTolerance = args.BetaTolerance
+                    BetaTolerance = args.BetaTolerance,
+                    HefTolerance = args.HefTolerance
                 })
                 .Select(grp => grp.ToList())
                 .OrderByDescending(grp => grp.Count)
@@ -37,6 +38,7 @@ namespace TransisterBatchCore
     public class ToleranceEqualityComparer : IEqualityComparer<TransisterSettings>
     {
         public double BetaTolerance { get; set; } = 0.001;
+        public double HefTolerance { get; set; } = 0;
 
         public bool Equals(TransisterSettings x, TransisterSettings y)
         {
