@@ -8,6 +8,7 @@ namespace TransisterBatchCore
 {
     internal class EPPlusExcelWorkspace : IExcelWorkspace
     {
+        private FileInfo File { get; set; } 
         private ExcelPackage Package { get; set; }
 
         public EPPlusExcelWorkspace()
@@ -20,9 +21,14 @@ namespace TransisterBatchCore
             ActionResult result = new ActionResult();
             try
             {
-                byte[] bin = File.ReadAllBytes(path);
-                using MemoryStream stream = new MemoryStream(bin);
-                Package = new ExcelPackage(stream);
+                File = new FileInfo(path);
+                if (File.Exists)
+                {
+                    Package = new ExcelPackage(File);
+                }
+                //byte[] bin = File.ReadAllBytes(path);
+                //using MemoryStream stream = new MemoryStream(bin);
+                //Package = new ExcelPackage(stream);
                 result.Message = $"Successfully loaded excel file and found {Package?.Workbook?.Worksheets?.Count} worksheet(s).";
             }
             catch (Exception ex)
@@ -90,6 +96,42 @@ namespace TransisterBatchCore
             catch (Exception ex)
             {
                 result.SetError(ex, $"Failed to load transister batch data");
+            }
+            return result;
+        }
+
+        public ActionResult GenerateDiscoveryWorksheet(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery)
+        {
+            ActionResult result = new ActionResult();
+            try
+            {
+                int discoveryIndex = batchLoadArgs.StartRow;
+                int outlierIndex = batchLoadArgs.StartRow;
+                ExcelWorksheet discoveryWorksheet = Package.Workbook.Worksheets.Add($"{batchLoadArgs.Name}_discovery");
+                discoveryWorksheet.AddHeader(batchLoadArgs);
+                ExcelWorksheet outlierWorksheet = Package.Workbook.Worksheets.Add($"{batchLoadArgs.Name}_outliers");
+                outlierWorksheet.AddHeader(batchLoadArgs);
+                List<List<TransisterSettings>> batches = transistorBatchDiscovery.Discovery.Process(batchLoadArgs);
+                foreach (List<TransisterSettings> batch in batches)
+                {
+                    if (batch.Count == 1)
+                    {
+                        outlierWorksheet.AppendTransisterSettings(batchLoadArgs, batch[0], outlierIndex++);
+                    }
+                    else if (batch.Count > 1)
+                    {
+                        discoveryWorksheet.AddMatchHeader(batch.Count, batchLoadArgs, discoveryIndex++);
+                        foreach (TransisterSettings match in batch)
+                        {
+                            discoveryWorksheet.AppendTransisterSettings(batchLoadArgs, match, discoveryIndex++);
+                        }
+                    }
+                }
+                Package.Save();
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex, $"Failed to generate discovery worksheet [{batchLoadArgs.Name}]");
             }
             return result;
         }

@@ -8,5 +8,6 @@ namespace TransisterBatchCore
         ActionResult Load(string path);
         ActionResult<List<string>> GetWorksheetNames();
         ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs);
+        ActionResult GenerateDiscoveryWorksheet(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery);
     }
 }

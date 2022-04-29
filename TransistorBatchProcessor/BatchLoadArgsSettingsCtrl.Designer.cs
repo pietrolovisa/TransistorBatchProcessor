@@ -57,7 +57,7 @@
             this.numericUpDownStartRow.Size = new System.Drawing.Size(77, 27);
             this.numericUpDownStartRow.TabIndex = 0;
             this.numericUpDownStartRow.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});

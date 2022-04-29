@@ -26,5 +26,24 @@ namespace TransisterBatchCore
             }
             return result;
         }
+
+        public static void AddHeader(this ExcelWorksheet worksheet, TransistorBatchLoadArgs batchLoadArgs, int row = 1)
+        {
+            worksheet.Cells[row, batchLoadArgs.KeyColumn].Value = "TRANSISTOR";
+            worksheet.Cells[row, batchLoadArgs.HefColumn].Value = "HFE";
+            worksheet.Cells[row, batchLoadArgs.BetaColumn].Value = "Beta";
+        }
+
+        public static void AddMatchHeader(this ExcelWorksheet worksheet, int count, TransistorBatchLoadArgs batchLoadArgs, int row)
+        {
+            worksheet.Cells[row, batchLoadArgs.KeyColumn].Value = $"Found [{count}] matches...";
+        }
+
+        public static void AppendTransisterSettings(this ExcelWorksheet worksheet, TransistorBatchLoadArgs batchLoadArgs, TransisterSettings transisterSettings, int row)
+        {
+            worksheet.Cells[row, batchLoadArgs.KeyColumn].Value = transisterSettings.Key;
+            worksheet.Cells[row, batchLoadArgs.HefColumn].Value = transisterSettings.HFE;
+            worksheet.Cells[row, batchLoadArgs.BetaColumn].Value = transisterSettings.Beta;
+        }
     }
 }

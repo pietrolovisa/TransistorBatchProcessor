@@ -67,22 +67,7 @@ namespace TransistorBatchProcessor
             WriteFeedback(loadBatchResult.Message);
             if (loadBatchResult.Success)
             {
-                List<List<TransisterSettings>> batches = loadBatchResult.Data.Discovery.Process(batchLoadArgs);
-                foreach(List<TransisterSettings> batch in batches)
-                {
-                    if (batch.Count == 1)
-                    {
-                        WriteFeedback($"Found outlier [{batch[0]}]");
-                    }
-                    else if(batch.Count > 1)
-                    {
-                        WriteFeedback($"Found [{batch.Count}] matches...");
-                        foreach(TransisterSettings match in batch)
-                        {
-                            WriteFeedback($"     -> [{match}]");
-                        }
-                    }
-                }
+                Workspace.GenerateDiscoveryWorksheet(batchLoadArgs, loadBatchResult.Data);
             }
         }
 

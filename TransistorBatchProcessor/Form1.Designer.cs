@@ -97,7 +97,7 @@
             transistorBatchLoadArgs2.HefTolerance = 0;
             transistorBatchLoadArgs2.KeyColumn = 1;
             transistorBatchLoadArgs2.Name = null;
-            transistorBatchLoadArgs2.StartRow = 1;
+            transistorBatchLoadArgs2.StartRow = 2;
             this.batchLoadArgsSettingsCtrl1.BatchLoadArgs = transistorBatchLoadArgs2;
             this.batchLoadArgsSettingsCtrl1.Location = new System.Drawing.Point(26, 88);
             this.batchLoadArgsSettingsCtrl1.Name = "batchLoadArgsSettingsCtrl1";
