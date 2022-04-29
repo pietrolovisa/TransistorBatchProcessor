@@ -26,9 +26,6 @@ namespace TransisterBatchCore
                 {
                     Package = new ExcelPackage(File);
                 }
-                //byte[] bin = File.ReadAllBytes(path);
-                //using MemoryStream stream = new MemoryStream(bin);
-                //Package = new ExcelPackage(stream);
                 result.Message = $"Successfully loaded excel file and found {Package?.Workbook?.Worksheets?.Count} worksheet(s).";
             }
             catch (Exception ex)
@@ -107,9 +104,11 @@ namespace TransisterBatchCore
             {
                 int discoveryIndex = batchLoadArgs.StartRow;
                 int outlierIndex = batchLoadArgs.StartRow;
-                ExcelWorksheet discoveryWorksheet = Package.Workbook.Worksheets.Add($"{batchLoadArgs.Name}_discovery");
+                ExcelWorksheet discoveryWorksheet = Package.Workbook.Worksheets.Add(
+                    Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_discovery"));
                 discoveryWorksheet.AddHeader(batchLoadArgs);
-                ExcelWorksheet outlierWorksheet = Package.Workbook.Worksheets.Add($"{batchLoadArgs.Name}_outliers");
+                ExcelWorksheet outlierWorksheet = Package.Workbook.Worksheets.Add(
+                    Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_outliers"));
                 outlierWorksheet.AddHeader(batchLoadArgs);
                 List<List<TransisterSettings>> batches = transistorBatchDiscovery.Discovery.Process(batchLoadArgs);
                 foreach (List<TransisterSettings> batch in batches)
