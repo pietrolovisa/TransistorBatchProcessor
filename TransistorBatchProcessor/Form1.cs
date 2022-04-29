@@ -9,6 +9,7 @@ namespace TransistorBatchProcessor
         public Form1()
         {
             InitializeComponent();
+            SetState(false);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -25,6 +26,12 @@ namespace TransistorBatchProcessor
             }
         }
 
+        private void SetState(bool enabled)
+        {
+            buttonProcessBatch.Enabled = enabled;
+            batchLoadArgsSettingsCtrl1.SetState(enabled);
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             WriteFeedback($"Creating workspace...");
@@ -38,11 +45,8 @@ namespace TransistorBatchProcessor
                 WriteFeedback(getWorksheetNamesResult.Message);
                 if (getWorksheetNamesResult.Success)
                 {
-                    foreach (string name in getWorksheetNamesResult.Data)
-                    {
-                        comboBox1.Items.Add(name);
-                    }
-                    if (comboBox1.Items.Count > 0) comboBox1.SelectedIndex = 0;
+                    SetState(true);
+                    batchLoadArgsSettingsCtrl1.ResetSource(getWorksheetNamesResult.Data);
                 }
                 else
                 {
@@ -57,16 +61,13 @@ namespace TransistorBatchProcessor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            TransistorBatchLoadArgs batchLoadArgs = new TransistorBatchLoadArgs
-            {
-                Name = comboBox1.SelectedItem?.ToString()
-            };
-            WriteFeedback($"Starting load transistor batch from [{comboBox1.SelectedItem?.ToString()}]...");
-            ActionResult<TransistorBatch> loadBatchResult = Workspace.LoadTransisterBatch(batchLoadArgs);
+            TransistorBatchLoadArgs batchLoadArgs = batchLoadArgsSettingsCtrl1.BatchLoadArgs;
+            WriteFeedback($"Starting load transistor batch from [{batchLoadArgs.Name}]...");
+            ActionResult<TransistorBatchDiscovery> loadBatchResult = Workspace.LoadTransisterBatch(batchLoadArgs);
             WriteFeedback(loadBatchResult.Message);
             if (loadBatchResult.Success)
             {
-                List<List<TransisterSettings>> batches = loadBatchResult.Data.Process(batchLoadArgs);
+                List<List<TransisterSettings>> batches = loadBatchResult.Data.Discovery.Process(batchLoadArgs);
                 foreach(List<TransisterSettings> batch in batches)
                 {
                     if (batch.Count == 1)

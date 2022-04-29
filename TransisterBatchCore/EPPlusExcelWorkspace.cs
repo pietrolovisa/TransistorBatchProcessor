@@ -50,26 +50,41 @@ namespace TransisterBatchCore
             return result;
         }
 
-        public ActionResult<TransistorBatch> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs)
+        public ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs)
         {
-            ActionResult<TransistorBatch> result = new ActionResult<TransistorBatch>();
+            ActionResult<TransistorBatchDiscovery> result = new ActionResult<TransistorBatchDiscovery>();
             try
             {
-                result.Data = new TransistorBatch();
+                result.Data = new TransistorBatchDiscovery();
                 ExcelWorksheet worksheet = Package.Workbook.Worksheets[workSheetArgs.Name];
                 if(worksheet != null)
                 {
-                    for (int i = workSheetArgs.StartRow; i <= workSheetArgs.EndRow; i++)
+                    int index = workSheetArgs.StartRow;
+                    bool endOfFile = false;
+                    while (!endOfFile)
                     {
-                        result.Data.Add(new TransisterSettings
+                        TransisterSettings transisterSettings = new TransisterSettings
                         {
-                            Key = worksheet.GetCellAsInt(i, workSheetArgs.KeyColumn),
-                            HFE = worksheet.GetCellAsDouble(i, workSheetArgs.HefColumn),
-                            Beta = worksheet.GetCellAsDouble(i, workSheetArgs.BetaColumn)
-                        });
+                            Key = worksheet.GetCellAsInt(index, workSheetArgs.KeyColumn),
+                            HFE = worksheet.GetCellAsDouble(index, workSheetArgs.HefColumn),
+                            Beta = worksheet.GetCellAsDouble(index, workSheetArgs.BetaColumn)
+                        };
+                        endOfFile = transisterSettings.EndOfFile;
+                        if (!endOfFile)
+                        {
+                            index++;
+                            if (transisterSettings.HasErrors)
+                            {
+                                result.Data.Errors.Add(transisterSettings);
+                            }
+                            else
+                            {
+                                result.Data.Discovery.Add(transisterSettings);
+                            }
+                        }
                     }
-                    result.Data = new TransistorBatch(result.Data.OrderBy(d => d.HFE));
-                    result.Message = $"Successfully loaded batch data and found [{result.Data.Count}] items";
+                    result.Data.Discovery = new TransistorBatch(result.Data.Discovery.OrderBy(d => d.HFE));
+                    result.Message = $"Successfully loaded batch data and found [{result.Data.Discovery.Count}] items";
                 }
             }
             catch (Exception ex)

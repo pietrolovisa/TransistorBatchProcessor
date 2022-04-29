@@ -7,6 +7,6 @@ namespace TransisterBatchCore
     {
         ActionResult Load(string path);
         ActionResult<List<string>> GetWorksheetNames();
-        ActionResult<TransistorBatch> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs);
+        ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs);
     }
 }

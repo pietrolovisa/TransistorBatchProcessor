@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace TransisterBatchCore
 {
+    public class TransistorBatchDiscovery
+    {
+        public TransistorBatch Discovery { get; set; } = new TransistorBatch();
+        public TransistorBatch Errors { get; set; } = new TransistorBatch();
+    }
+
     public class TransistorBatch : List<TransisterSettings>
     {
         public TransistorBatch()
