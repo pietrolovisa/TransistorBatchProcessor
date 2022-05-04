@@ -20,15 +20,15 @@ namespace TransisterBatchCore
         {
         }
 
-        public List<List<TransisterSettings>> Process(TransistorBatchLoadArgs args)
+        public List<TransistorBatch> Process(TransistorBatchLoadArgs args)
         {
-            List<List<TransisterSettings>> batches = this
+            List<TransistorBatch> batches = this
                 .GroupBy(ts => ts, new ToleranceEqualityComparer
                 {
                     BetaTolerance = args.BetaTolerance,
                     HefTolerance = args.HefTolerance
                 })
-                .Select(grp => grp.ToList())
+                .Select(grp => new TransistorBatch(grp.ToList()))
                 .OrderByDescending(grp => grp.Count)
                 .ToList();
             return batches;

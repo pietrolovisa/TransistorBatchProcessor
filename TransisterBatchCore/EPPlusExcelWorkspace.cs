@@ -110,21 +110,20 @@ namespace TransisterBatchCore
                 ExcelWorksheet outlierWorksheet = Package.Workbook.Worksheets.Add(
                     Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_outliers"));
                 outlierWorksheet.AddHeader(batchLoadArgs);
-                List<List<TransisterSettings>> batches = transistorBatchDiscovery.Discovery.Process(batchLoadArgs);
-                List<List<TransisterSettings>> outlierBatches = batches
+                List<TransistorBatch> batches = transistorBatchDiscovery.Discovery.Process(batchLoadArgs);
+                List<TransistorBatch> outlierBatches = batches
                     .Where(b => b.Count == 1)
                     .OrderBy(b => b[0].Key)
                     .ToList();
-                foreach (List<TransisterSettings> outlierBatch in outlierBatches)
+                foreach (TransistorBatch outlierBatch in outlierBatches)
                 {
                     outlierWorksheet.AppendTransisterSettings(batchLoadArgs, outlierBatch[0], outlierIndex++);
                 }
-
-                List<List<TransisterSettings>> discoveryBatches = batches
+                List<TransistorBatch> discoveryBatches = batches
                     .Where(b => b.Count > 1)
                     .OrderBy(b => b[0].Key)
                     .ToList();
-                foreach (List<TransisterSettings> discoveryBatch in discoveryBatches)
+                foreach (TransistorBatch discoveryBatch in discoveryBatches)
                 {
                     discoveryWorksheet.AddMatchHeader(discoveryBatch.Count, batchLoadArgs, discoveryIndex++);
                     foreach (TransisterSettings match in discoveryBatch)
