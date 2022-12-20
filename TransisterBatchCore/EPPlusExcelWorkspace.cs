@@ -9,7 +9,7 @@ namespace TransisterBatchCore
     internal class EPPlusExcelWorkspace : IExcelWorkspace
     {
         private FileInfo File { get; set; } 
-        private ExcelPackage Package { get; set; }
+        public ExcelPackage Package { get; private set; }
 
         public EPPlusExcelWorkspace()
         {
@@ -26,7 +26,6 @@ namespace TransisterBatchCore
                 {
                     Package = new ExcelPackage(File);
                 }
-                result.Message = $"Successfully loaded excel file and found {Package?.Workbook?.Worksheets?.Count} worksheet(s).";
             }
             catch (Exception ex)
             {
@@ -53,28 +52,29 @@ namespace TransisterBatchCore
             return result;
         }
 
-        public ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs)
+        public ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs batchLoadArgs)
         {
             ActionResult<TransistorBatchDiscovery> result = new ActionResult<TransistorBatchDiscovery>();
             try
             {
                 result.Data = new TransistorBatchDiscovery();
-                ExcelWorksheet worksheet = Package.Workbook.Worksheets[workSheetArgs.Name];
+                ExcelWorksheet worksheet = Package.Workbook.Worksheets[batchLoadArgs.Name];
                 if(worksheet != null)
                 {
-                    int index = workSheetArgs.StartRow;
+                    int index = batchLoadArgs.StartRow;
                     bool endOfFile = false;
                     while (!endOfFile)
                     {
                         TransisterSettings transisterSettings = new TransisterSettings
                         {
-                            Key = worksheet.GetCellAsInt(index, workSheetArgs.KeyColumn),
-                            HFE = worksheet.GetCellAsDouble(index, workSheetArgs.HefColumn),
-                            Beta = worksheet.GetCellAsDouble(index, workSheetArgs.BetaColumn)
+                            Key = worksheet.GetCellAsInt(index, batchLoadArgs.KeyColumn),
+                            HFE = worksheet.GetCellAsDouble(index, batchLoadArgs.HefColumn),
+                            Beta = worksheet.GetCellAsDouble(index, batchLoadArgs.BetaColumn)
                         };
                         endOfFile = transisterSettings.EndOfFile;
                         if (!endOfFile)
                         {
+                            result.Data.ItemCount++;
                             index++;
                             if (transisterSettings.HasErrors)
                             {
@@ -87,6 +87,15 @@ namespace TransisterBatchCore
                         }
                     }
                     result.Data.Discovery = new TransistorBatch(result.Data.Discovery.OrderBy(d => d.HFE));
+                    List<TransistorBatch> batches = result.Data.Discovery.Process(batchLoadArgs);
+                    result.Data.Matches = batches
+                        .Where(b => b.Count > 1)
+                        .OrderBy(b => b[0].Key)
+                        .ToList();
+                    result.Data.Outliers = batches
+                        .Where(b => b.Count == 1)
+                        .OrderBy(b => b[0].Key)
+                        .ToList();
                     result.Message = $"Successfully loaded batch data and found [{result.Data.Discovery.Count}] items";
                 }
             }
@@ -97,33 +106,25 @@ namespace TransisterBatchCore
             return result;
         }
 
-        public ActionResult GenerateDiscoveryWorksheet(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery)
+        public ActionResult<TransistorBatchSave> GenerateDiscoveryWorksheet(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery)
         {
-            ActionResult result = new ActionResult();
+            ActionResult<TransistorBatchSave> result = new ActionResult<TransistorBatchSave>();
             try
             {
+                result.Data = new TransistorBatchSave();
                 int discoveryIndex = batchLoadArgs.StartRow;
                 int outlierIndex = batchLoadArgs.StartRow;
-                ExcelWorksheet discoveryWorksheet = Package.Workbook.Worksheets.Add(
-                    Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_discovery"));
+                result.Data.OutliersWorksheet = Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_outliers");
+                result.Data.MatchesWorksheet = Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_discovery");
+                ExcelWorksheet discoveryWorksheet = Package.Workbook.Worksheets.Add(result.Data.MatchesWorksheet);
                 discoveryWorksheet.AddHeader(batchLoadArgs);
-                ExcelWorksheet outlierWorksheet = Package.Workbook.Worksheets.Add(
-                    Package.CreateUniqueNameWorksheetName($"{batchLoadArgs.Name}_outliers"));
+                ExcelWorksheet outlierWorksheet = Package.Workbook.Worksheets.Add(result.Data.OutliersWorksheet);
                 outlierWorksheet.AddHeader(batchLoadArgs);
-                List<TransistorBatch> batches = transistorBatchDiscovery.Discovery.Process(batchLoadArgs);
-                List<TransistorBatch> outlierBatches = batches
-                    .Where(b => b.Count == 1)
-                    .OrderBy(b => b[0].Key)
-                    .ToList();
-                foreach (TransistorBatch outlierBatch in outlierBatches)
+                foreach (TransistorBatch outlierBatch in transistorBatchDiscovery.Outliers)
                 {
                     outlierWorksheet.AppendTransisterSettings(batchLoadArgs, outlierBatch[0], outlierIndex++);
                 }
-                List<TransistorBatch> discoveryBatches = batches
-                    .Where(b => b.Count > 1)
-                    .OrderBy(b => b[0].Key)
-                    .ToList();
-                foreach (TransistorBatch discoveryBatch in discoveryBatches)
+                foreach (TransistorBatch discoveryBatch in transistorBatchDiscovery.Matches)
                 {
                     discoveryWorksheet.AddMatchHeader(discoveryBatch.Count, batchLoadArgs, discoveryIndex++);
                     foreach (TransisterSettings match in discoveryBatch)

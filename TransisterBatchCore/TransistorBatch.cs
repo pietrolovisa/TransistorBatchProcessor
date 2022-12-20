@@ -3,10 +3,19 @@ using System.Collections.Generic;
 
 namespace TransisterBatchCore
 {
+    public class TransistorBatchSave
+    {
+        public string OutliersWorksheet { get; set; }
+        public string MatchesWorksheet { get; set; }
+    }
+
     public class TransistorBatchDiscovery
     {
+        public int ItemCount { get; set; }
         public TransistorBatch Discovery { get; set; } = new TransistorBatch();
         public TransistorBatch Errors { get; set; } = new TransistorBatch();
+        public List<TransistorBatch> Matches { get; set; } = new List<TransistorBatch>();
+        public List<TransistorBatch> Outliers { get; set; } = new List<TransistorBatch>();
     }
 
     public class TransistorBatch : List<TransisterSettings>

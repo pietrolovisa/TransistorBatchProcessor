@@ -67,9 +67,9 @@
             this.labelStartRow.AutoSize = true;
             this.labelStartRow.Location = new System.Drawing.Point(4, 55);
             this.labelStartRow.Name = "labelStartRow";
-            this.labelStartRow.Size = new System.Drawing.Size(69, 20);
+            this.labelStartRow.Size = new System.Drawing.Size(73, 20);
             this.labelStartRow.TabIndex = 1;
-            this.labelStartRow.Text = "StartRow";
+            this.labelStartRow.Text = "Start Row";
             // 
             // labelKeyColumn
             // 

@@ -1,3 +1,5 @@
+using System.IO.Packaging;
+using System.Reflection;
 using TransisterBatchCore;
 
 namespace TransistorBatchProcessor
@@ -9,7 +11,14 @@ namespace TransistorBatchProcessor
         public Form1()
         {
             InitializeComponent();
+            UpdateHeader();
             SetState(false);
+        }
+
+        private void UpdateHeader()
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            this.Text = $"{Text} - {version}";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -41,6 +50,7 @@ namespace TransistorBatchProcessor
             WriteFeedback(loadResult.Message);
             if (loadResult.Success)
             {
+                WriteFeedback($"Successfully loaded workspace and found {Workspace.Package?.Workbook?.Worksheets?.Count} worksheet(s).");
                 ActionResult<List<string>> getWorksheetNamesResult = Workspace.GetWorksheetNames();
                 WriteFeedback(getWorksheetNamesResult.Message);
                 if (getWorksheetNamesResult.Success)
@@ -62,12 +72,31 @@ namespace TransistorBatchProcessor
         private void button3_Click(object sender, EventArgs e)
         {
             TransistorBatchLoadArgs batchLoadArgs = batchLoadArgsSettingsCtrl1.BatchLoadArgs;
-            WriteFeedback($"Starting load transistor batch from [{batchLoadArgs.Name}]...");
+            WriteFeedback($"Starting load transistor batch from worksheet [{batchLoadArgs.Name}]...");
             ActionResult<TransistorBatchDiscovery> loadBatchResult = Workspace.LoadTransisterBatch(batchLoadArgs);
-            WriteFeedback(loadBatchResult.Message);
+            
             if (loadBatchResult.Success)
             {
-                Workspace.GenerateDiscoveryWorksheet(batchLoadArgs, loadBatchResult.Data);
+                WriteFeedback($"Successfully loaded batch data from worksheet [{batchLoadArgs.Name}]");
+                WriteFeedback($"    Found [{loadBatchResult.Data.Discovery.Count}] items.");
+                WriteFeedback($"    Found [{loadBatchResult.Data.Errors.Count}] items with errors.");
+                WriteFeedback($"    Found [{loadBatchResult.Data.Matches.Count}] matches.");
+                WriteFeedback($"    Found [{loadBatchResult.Data.Outliers.Count}] outliers.");
+                WriteFeedback($"Starting save matches and outliers back to worksheet...");
+                ActionResult<TransistorBatchSave> saveResult = Workspace.GenerateDiscoveryWorksheet(batchLoadArgs, loadBatchResult.Data);
+                if (saveResult.Success)
+                {
+                    WriteFeedback($"    Saved matches to new worksheet [{saveResult.Data.MatchesWorksheet}].");
+                    WriteFeedback($"    Saved outliers to new worksheet [{saveResult.Data.OutliersWorksheet}].");
+                }
+                else
+                {
+                    WriteFeedback(saveResult.Message);
+                }
+            }
+            else
+            {
+                WriteFeedback(loadBatchResult.Message);
             }
         }
 
