@@ -1,5 +1,4 @@
 ﻿using OfficeOpenXml;
-using System;
 using System.Collections.Generic;
 
 namespace TransisterBatchCore
@@ -10,7 +9,7 @@ namespace TransisterBatchCore
 
         ActionResult Load(string path);
         ActionResult<List<string>> GetWorksheetNames();
-        ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs workSheetArgs);
-        ActionResult<TransistorBatchSave> GenerateDiscoveryWorksheet(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery);
+        ActionResult<TransistorBatchDiscovery> GenerateTransisterManifest(TransistorBatchLoadArgs workSheetArgs);
+        ActionResult<TransistorBatchSave> GenerateDiscoveryWorksheets(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery);
     }
 }

@@ -52,7 +52,7 @@ namespace TransisterBatchCore
             return result;
         }
 
-        public ActionResult<TransistorBatchDiscovery> LoadTransisterBatch(TransistorBatchLoadArgs batchLoadArgs)
+        public ActionResult<TransistorBatchDiscovery> GenerateTransisterManifest(TransistorBatchLoadArgs batchLoadArgs)
         {
             ActionResult<TransistorBatchDiscovery> result = new ActionResult<TransistorBatchDiscovery>();
             try
@@ -69,7 +69,12 @@ namespace TransisterBatchCore
                         {
                             Key = worksheet.GetCellAsInt(index, batchLoadArgs.KeyColumn),
                             HFE = worksheet.GetCellAsDouble(index, batchLoadArgs.HefColumn),
-                            Beta = worksheet.GetCellAsDouble(index, batchLoadArgs.BetaColumn)
+                            Beta = worksheet.GetCellAsDouble(index, batchLoadArgs.BetaColumn),
+                            Source = new TransisterSettingsSource
+                            {
+                                Name = batchLoadArgs.Name,
+                                Row = index
+                            }
                         };
                         endOfFile = transisterSettings.EndOfFile;
                         if (!endOfFile)
@@ -98,6 +103,10 @@ namespace TransisterBatchCore
                         .ToList();
                     result.Message = $"Successfully loaded batch data and found [{result.Data.Discovery.Count}] items";
                 }
+                else
+                {
+                    result.SetError($"Failed to load transister batch data. Worksheet [{batchLoadArgs.Name}] is invalid.");
+                }
             }
             catch (Exception ex)
             {
@@ -106,7 +115,7 @@ namespace TransisterBatchCore
             return result;
         }
 
-        public ActionResult<TransistorBatchSave> GenerateDiscoveryWorksheet(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery)
+        public ActionResult<TransistorBatchSave> GenerateDiscoveryWorksheets(TransistorBatchLoadArgs batchLoadArgs, TransistorBatchDiscovery transistorBatchDiscovery)
         {
             ActionResult<TransistorBatchSave> result = new ActionResult<TransistorBatchSave>();
             try

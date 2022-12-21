@@ -16,6 +16,8 @@ namespace TransisterBatchCore
         public TransistorBatch Errors { get; set; } = new TransistorBatch();
         public List<TransistorBatch> Matches { get; set; } = new List<TransistorBatch>();
         public List<TransistorBatch> Outliers { get; set; } = new List<TransistorBatch>();
+
+        public bool HasErrors => (Errors?.Count ?? 0) > 0;
     }
 
     public class TransistorBatch : List<TransisterSettings>
@@ -55,7 +57,6 @@ namespace TransisterBatchCore
                 x.Beta - BetaTolerance <= y.Beta && x.Beta + BetaTolerance > y.Beta;
         }
 
-        //This is to force the use of Equals methods.
         public int GetHashCode(TransisterSettings obj) => 1;
     }
 }

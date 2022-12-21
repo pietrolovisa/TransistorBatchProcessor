@@ -73,21 +73,25 @@ namespace TransistorBatchProcessor
         {
             TransistorBatchLoadArgs batchLoadArgs = batchLoadArgsSettingsCtrl1.BatchLoadArgs;
             WriteFeedback($"Starting load transistor batch from worksheet [{batchLoadArgs.Name}]...");
-            ActionResult<TransistorBatchDiscovery> loadBatchResult = Workspace.LoadTransisterBatch(batchLoadArgs);
-            
+            ActionResult<TransistorBatchDiscovery> loadBatchResult = Workspace.GenerateTransisterManifest(batchLoadArgs);
             if (loadBatchResult.Success)
             {
                 WriteFeedback($"Successfully loaded batch data from worksheet [{batchLoadArgs.Name}]");
-                WriteFeedback($"    Found [{loadBatchResult.Data.Discovery.Count}] items.");
-                WriteFeedback($"    Found [{loadBatchResult.Data.Errors.Count}] items with errors.");
-                WriteFeedback($"    Found [{loadBatchResult.Data.Matches.Count}] matches.");
-                WriteFeedback($"    Found [{loadBatchResult.Data.Outliers.Count}] outliers.");
+                WriteFeedback($"Found [{loadBatchResult.Data.ItemCount}] item(s).", 1);
+                WriteFeedback($"Found [{loadBatchResult.Data.Errors.Count}] item(s) with errors.", 1);
+                if (loadBatchResult.Data.HasErrors)
+                {
+                    loadBatchResult.Data.Errors.ForEach(transistor => 
+                        WriteFeedback($"Row [{transistor.Source.Row}] of worksheet [{transistor.Source.Name}] is invalid ({transistor}).", 2));
+                }
+                WriteFeedback($"Found [{loadBatchResult.Data.Matches.Count}] match(es).", 1);
+                WriteFeedback($"Found [{loadBatchResult.Data.Outliers.Count}] outlier(s).", 1);
                 WriteFeedback($"Starting save matches and outliers back to worksheet...");
-                ActionResult<TransistorBatchSave> saveResult = Workspace.GenerateDiscoveryWorksheet(batchLoadArgs, loadBatchResult.Data);
+                ActionResult<TransistorBatchSave> saveResult = Workspace.GenerateDiscoveryWorksheets(batchLoadArgs, loadBatchResult.Data);
                 if (saveResult.Success)
                 {
-                    WriteFeedback($"    Saved matches to new worksheet [{saveResult.Data.MatchesWorksheet}].");
-                    WriteFeedback($"    Saved outliers to new worksheet [{saveResult.Data.OutliersWorksheet}].");
+                    WriteFeedback($"Saved matches to new worksheet [{saveResult.Data.MatchesWorksheet}].", 1);
+                    WriteFeedback($"Saved outliers to new worksheet [{saveResult.Data.OutliersWorksheet}].", 1);
                 }
                 else
                 {
@@ -100,9 +104,10 @@ namespace TransistorBatchProcessor
             }
         }
 
-        private void WriteFeedback(string message)
+        private void WriteFeedback(string message, int indent = 0)
         {
-            textBox2.AppendText(message);
+            string prefix = indent < 1 ? string.Empty : $"{new string('\t', indent)}-> ";
+            textBox2.AppendText($"{prefix}{message}");
             textBox2.AppendText(Environment.NewLine);
         }
     }

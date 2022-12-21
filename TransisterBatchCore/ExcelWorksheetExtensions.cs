@@ -13,7 +13,10 @@ namespace TransisterBatchCore
             int result = -1;
             if (rawValue != null)
             {
-                _ = int.TryParse(rawValue, out result);
+                if(!int.TryParse(rawValue, out result))
+                {
+                    result = -1;
+                }
             }
             return result;
         }
@@ -24,7 +27,10 @@ namespace TransisterBatchCore
             double result = -1;
             if (rawValue != null)
             {
-                _ = double.TryParse(rawValue, out result);
+                if (!double.TryParse(rawValue, out result))
+                {
+                    result = -1;
+                }
             }
             return result;
         }
@@ -50,7 +56,10 @@ namespace TransisterBatchCore
 
         public static string CreateUniqueNameWorksheetName(this ExcelPackage Package, string worksheetName, int maxAttempts = 1024)
         {
-            List<string> existingNames = Package.Workbook.Worksheets.Where(w => w.Name.StartsWith(worksheetName)).Select(w => w.Name).ToList();
+            List<string> existingNames = Package.Workbook.Worksheets
+                .Where(w => w.Name.StartsWith(worksheetName))
+                .Select(w => w.Name)
+                .ToList();
             if (existingNames.Count > 0)
             {
                 for (var index = 2; index < maxAttempts; index++)
