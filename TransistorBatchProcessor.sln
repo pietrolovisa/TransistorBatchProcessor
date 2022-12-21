@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransistorBatchProcessor", "TransistorBatchProcessor\TransistorBatchProcessor.csproj", "{4228C613-2876-46AC-941E-231329DE1365}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransistorBatchProcessor", "TransistorBatchProcessor\TransistorBatchProcessor.csproj", "{4228C613-2876-46AC-941E-231329DE1365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransisterBatchCore", "TransisterBatchCore\TransisterBatchCore.csproj", "{A9C3D93C-0703-4309-8B5C-D4040CDEAFB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransisterBatchCore", "TransisterBatchCore\TransisterBatchCore.csproj", "{A9C3D93C-0703-4309-8B5C-D4040CDEAFB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransisterBatch.EntityFramework", "TransisterBatch.EntityFramework\TransisterBatch.EntityFramework.csproj", "{A57B1E8F-87D9-45C3-B114-6D9C52017086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A9C3D93C-0703-4309-8B5C-D4040CDEAFB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9C3D93C-0703-4309-8B5C-D4040CDEAFB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9C3D93C-0703-4309-8B5C-D4040CDEAFB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57B1E8F-87D9-45C3-B114-6D9C52017086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57B1E8F-87D9-45C3-B114-6D9C52017086}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57B1E8F-87D9-45C3-B114-6D9C52017086}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57B1E8F-87D9-45C3-B114-6D9C52017086}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

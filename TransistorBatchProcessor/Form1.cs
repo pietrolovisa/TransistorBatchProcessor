@@ -1,6 +1,8 @@
 using System.IO.Packaging;
 using System.Reflection;
 using TransisterBatchCore;
+using TransisterBatch.EntityFramework.Repository;
+using TransisterBatch.EntityFramework.Domain;
 
 namespace TransistorBatchProcessor
 {
@@ -8,8 +10,19 @@ namespace TransistorBatchProcessor
     {
         public IExcelWorkspace Workspace { get; set; }
 
-        public Form1()
+        private readonly IBatchTypeRepository _batchTypeRepository;
+        private readonly IBatchRepository _batchRepository;
+        private readonly ITransistorRepository _transistorRepository;
+
+        public Form1(
+            IBatchTypeRepository batchTypeRepository,
+            IBatchRepository batchRepository,
+            ITransistorRepository transistorRepository)
         {
+            _batchTypeRepository = batchTypeRepository;
+            _batchRepository = batchRepository;
+            _transistorRepository = transistorRepository;
+
             InitializeComponent();
             UpdateHeader();
             SetState(false);
@@ -23,6 +36,42 @@ namespace TransistorBatchProcessor
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //BatchType batchTypeBC549 = new BatchType
+            //{
+            //    Name = "BC549",
+            //    Description = "BC549"
+            //};
+
+            //_batchTypeRepository.Insert(batchTypeBC549).GetAwaiter().GetResult();
+            //_batchTypeRepository.Insert(new BatchType
+            //{
+            //    Name = "BC559",
+            //    Description = "BC559"
+            //}).GetAwaiter().GetResult();
+            //_batchTypeRepository.Insert(new BatchType
+            //{
+            //    Name = "PN4250",
+            //    Description = "PN4250"
+            //}).GetAwaiter().GetResult();
+
+            //Batch batch = new Batch
+            //{
+            //    Name = "TestBatch",
+            //    BatchTypeId = batchTypeBC549.Id
+            //};
+            //_batchRepository.Insert(batch).GetAwaiter().GetResult();
+            //_transistorRepository.Insert(new Transistor
+            //{
+            //    Idx = 1,
+            //    HEF = 453,
+            //    Beta = 0.764,
+            //    BatchId = batch.Id
+            //}).GetAwaiter().GetResult();
+            //List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
+            //{
+            //    IncludeTransistors = true,
+            //    IncludeBatchType = true
+            //}).GetAwaiter().GetResult();
             using OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = "c:\\";
             openFileDialog.Filter = "txt files (*.xls)|*.txt|All files (*.*)|*.*";

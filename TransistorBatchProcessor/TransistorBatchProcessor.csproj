@@ -6,14 +6,16 @@
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.0.0.2</Version>
+    <Version>1.0.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="6.0.0-beta" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TransisterBatch.EntityFramework\TransisterBatch.EntityFramework.csproj" />
     <ProjectReference Include="..\TransisterBatchCore\TransisterBatchCore.csproj" />
   </ItemGroup>
 

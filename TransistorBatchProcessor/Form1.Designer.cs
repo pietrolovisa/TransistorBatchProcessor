@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TransisterBatchCore.TransistorBatchLoadArgs transistorBatchLoadArgs2 = new TransisterBatchCore.TransistorBatchLoadArgs();
+            TransisterBatchCore.TransistorBatchLoadArgs transistorBatchLoadArgs1 = new TransisterBatchCore.TransistorBatchLoadArgs();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -91,17 +91,17 @@
             // 
             // batchLoadArgsSettingsCtrl1
             // 
-            transistorBatchLoadArgs2.BetaColumn = 3;
-            transistorBatchLoadArgs2.BetaTolerance = 0.001D;
-            transistorBatchLoadArgs2.HefColumn = 2;
-            transistorBatchLoadArgs2.HefTolerance = 0;
-            transistorBatchLoadArgs2.KeyColumn = 1;
-            transistorBatchLoadArgs2.Name = null;
-            transistorBatchLoadArgs2.StartRow = 2;
-            this.batchLoadArgsSettingsCtrl1.BatchLoadArgs = transistorBatchLoadArgs2;
+            transistorBatchLoadArgs1.BetaColumn = 3;
+            transistorBatchLoadArgs1.BetaTolerance = 0.001D;
+            transistorBatchLoadArgs1.HefColumn = 2;
+            transistorBatchLoadArgs1.HefTolerance = 0;
+            transistorBatchLoadArgs1.KeyColumn = 1;
+            transistorBatchLoadArgs1.Name = null;
+            transistorBatchLoadArgs1.StartRow = 2;
+            this.batchLoadArgsSettingsCtrl1.BatchLoadArgs = transistorBatchLoadArgs1;
             this.batchLoadArgsSettingsCtrl1.Location = new System.Drawing.Point(26, 88);
             this.batchLoadArgsSettingsCtrl1.Name = "batchLoadArgsSettingsCtrl1";
-            this.batchLoadArgsSettingsCtrl1.Size = new System.Drawing.Size(692, 215);
+            this.batchLoadArgsSettingsCtrl1.Size = new System.Drawing.Size(444, 215);
             this.batchLoadArgsSettingsCtrl1.TabIndex = 6;
             // 
             // Form1
