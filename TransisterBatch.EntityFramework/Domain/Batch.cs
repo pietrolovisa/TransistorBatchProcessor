@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using TransisterBatch.EntityFramework.Extensions;
 
 namespace TransisterBatch.EntityFramework.Domain
@@ -7,6 +8,8 @@ namespace TransisterBatch.EntityFramework.Domain
     {
         public string Name { get; set; }
         public long BatchTypeId { get; set; }
+        [NotMapped]
+        public string Description => $"{Name} ({Type?.Name})";
 
         public BatchType Type { get; set; }
         public List<Transistor> Transistors { get; set; }
@@ -27,5 +30,12 @@ namespace TransisterBatch.EntityFramework.Domain
                     .HasForeignKey(e => new { e.BatchTypeId });
             });
         }
+
+        public override List<string> ToStrings => new List<string>
+                {
+                    Id.ToString(),
+                    Name,
+                    Type?.Name
+                };
     }
 }

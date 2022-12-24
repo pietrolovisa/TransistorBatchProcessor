@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using TransisterBatch.EntityFramework;
 using TransisterBatch.EntityFramework.Extensions;
-using TransisterBatch.EntityFramework.Repository;
 
 namespace TransistorBatchProcessor
 {
@@ -13,23 +12,16 @@ namespace TransistorBatchProcessor
         [STAThread]
         static void Main()
         {
-            //// To customize application configuration such as set high DPI settings or default font,
-            //// see https://aka.ms/applicationconfiguration.
-            //ApplicationConfiguration.Initialize();
-            //Application.Run(new Form1());
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             ServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
-
-            using (ServiceProvider serviceProvider = services.BuildServiceProvider())
-            {
-                Form1 form1 = serviceProvider.GetRequiredService<Form1>();
-                Application.Run(form1);
-            }
+            using ServiceProvider serviceProvider = services.BuildServiceProvider();
+            //Form1 form = serviceProvider.GetRequiredService<Form1>();
+            TransistorBatchForm form = serviceProvider.GetRequiredService<TransistorBatchForm>();
+            Application.Run(form);
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -41,6 +33,7 @@ namespace TransistorBatchProcessor
             };
             services.SetupDatabase<EFContext>(configuration);
             services.AddScoped<Form1>();
+            services.AddScoped<TransistorBatchForm>();
         }
     }
 }

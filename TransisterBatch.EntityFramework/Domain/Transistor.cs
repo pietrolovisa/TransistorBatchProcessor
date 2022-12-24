@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using TransisterBatch.EntityFramework.Extensions;
 
 namespace TransisterBatch.EntityFramework.Domain
@@ -31,5 +32,13 @@ namespace TransisterBatch.EntityFramework.Domain
                     .HasForeignKey(e => new { e.BatchId });
             });
         }
+
+        public override List<string> ToStrings => new List<string>
+        {
+            Id.ToString(),
+            Idx.ToString(),
+            HEF.ToString(),
+            Beta.ToString()
+        };
     }
 }

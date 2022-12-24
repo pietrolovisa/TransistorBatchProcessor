@@ -25,5 +25,12 @@ namespace TransisterBatch.EntityFramework.Domain
                     .IsReqiredWithMaxLength(512);
             });
         }
+
+        public override List<string> ToStrings => new List<string>
+        {
+            Id.ToString(),
+            Name,
+            Description
+        };
     }
 }

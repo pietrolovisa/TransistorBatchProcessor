@@ -7,6 +7,8 @@ namespace TransisterBatch.EntityFramework.Domain
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public DateTime LastUpdateDate { get; set; } = DateTime.UtcNow;
         public bool Inactive { get; set; } = false;
+
+        public abstract List<string> ToStrings { get; }
     }
 
     public interface ITableBase
@@ -14,5 +16,7 @@ namespace TransisterBatch.EntityFramework.Domain
         DateTime CreateDate { get; set; }
         DateTime LastUpdateDate { get; set; }
         bool Inactive { get; set; }
+
+        List<string> ToStrings { get; }
     }
 }
