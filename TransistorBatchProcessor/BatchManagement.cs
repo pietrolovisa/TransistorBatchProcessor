@@ -103,7 +103,7 @@ namespace TransistorBatchProcessor
                     {
                         IncludeBatchType = true
                     }).GetAwaiter().GetResult();
-                    listView1.AddItemToView<Batch>(batch, true);
+                    listView1.AddItemToView<Batch>(batch, null, true);
                     OnNotify?.Invoke(this, NotificationEventArgs.BatchAdded);
                 }
                 else

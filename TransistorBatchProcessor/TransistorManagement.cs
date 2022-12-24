@@ -160,7 +160,7 @@ namespace TransistorBatchProcessor
                     transistor.BatchId = ActiveBatch.Id;
                     _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
                     ActiveBatch.Transistors.Add(transistor);
-                    listView1.AddItemToView<Transistor>(transistor, true);
+                    listView1.AddItemToView<Transistor>(transistor, null, true);
                 }
                 else
                 {

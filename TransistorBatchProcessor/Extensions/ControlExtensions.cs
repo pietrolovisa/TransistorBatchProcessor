@@ -76,17 +76,37 @@ namespace TransistorBatchProcessor.Extensions
             }
         }
 
-        public static void AddItemToView<T>(this ListView listView, T item, bool select = false)
+        public static void AddItemToGroup<T>(this ListViewGroup listViewGroup, T item, bool select = false)
             where T : ITableBase
         {
-            listView.AddItem(item.ToStrings, item, select);
+            listViewGroup.AddItem(item.ToStrings, item, select);
         }
 
-        public static void AddItem(this ListView listView, List<string> columns, object item, bool select = false)
+        public static void AddItem(this ListViewGroup listViewGroup, List<string> columns, object item, bool select = false)
         {
             ListViewItem listViewItem = new ListViewItem(columns.ToArray())
             {
                 Tag = item
+            };
+            listViewGroup.Items.Add(listViewItem);
+            if (select)
+            {
+                listViewItem.ForceSelected();
+            }
+        }
+
+        public static void AddItemToView<T>(this ListView listView, T item, ListViewGroup group = null, bool select = false)
+            where T : ITableBase
+        {
+            listView.AddItem(item.ToStrings, item, group, select);
+        }
+
+        public static void AddItem(this ListView listView, List<string> columns, object item, ListViewGroup group = null, bool select = false)
+        {
+            ListViewItem listViewItem = new ListViewItem(columns.ToArray())
+            {
+                Tag = item,
+                Group = group
             };
             listView.Items.Add(listViewItem);
             if (select)

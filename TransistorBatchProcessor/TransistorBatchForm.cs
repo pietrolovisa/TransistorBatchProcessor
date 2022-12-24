@@ -25,10 +25,6 @@ namespace TransistorBatchProcessor
         private System.Windows.Forms.TabControl TabCtrl { get; set; }
 
         private List<IManagementTool> ManagementTools { get; set; }
-
-        //private BatchManagement BatchManagementCtrl { get; set; }
-        //private BatchTypeManagement BatchTypeManagementCtrl { get; set; }
-        //private TransistorManagement TransistorManagementCtrl { get; set; }
  
         public TransistorBatchForm(
             IBatchTypeRepository batchTypeRepository,
@@ -61,6 +57,13 @@ namespace TransistorBatchProcessor
             };
             abtchManagementCtrl.OnNotify += ManagementToolsOnNotify;
             ManagementTools.Add(abtchManagementCtrl);
+
+            Processor processor = new Processor(_batchRepository, _batchTypeRepository, _transistorRepository)
+            {
+                Dock = DockStyle.Fill
+            };
+            processor.OnNotify += ManagementToolsOnNotify;
+            ManagementTools.Add(processor);
 
             InitializeComponent();
         }

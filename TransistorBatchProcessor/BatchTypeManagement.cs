@@ -93,7 +93,7 @@ namespace TransistorBatchProcessor
                 if (batchTypeCtrl1.EntityInfo.State == EditState.New)
                 {
                     _batchTypeRepository.Insert(batchType).GetAwaiter().GetResult();
-                    listView1.AddItemToView<BatchType>(batchType, true);
+                    listView1.AddItemToView<BatchType>(batchType, null, true);
                 }
                 else
                 {
