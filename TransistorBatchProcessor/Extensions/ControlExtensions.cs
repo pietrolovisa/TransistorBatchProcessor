@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
 using TransisterBatch.EntityFramework.Domain;
 
 namespace TransistorBatchProcessor.Extensions
@@ -43,7 +44,7 @@ namespace TransistorBatchProcessor.Extensions
             listView.SelectedIndexChanged += selectedIndexChanged;
             foreach(KeyValuePair<string, int> column in columns)
             {
-                listView.Columns.Add(column.Key, column.Value, HorizontalAlignment.Center);
+                listView.Columns.Add(column.Key, column.Value, HorizontalAlignment.Left);
             }
         }
 
@@ -123,6 +124,18 @@ namespace TransistorBatchProcessor.Extensions
                 State = EditState.Update,
                 Entity = transistor
             };
+        }
+
+        public static void SetItemAfterUpdate<T>(this ListView listView, T item)
+            where T : ITableBase
+        {
+            listView.SelectedItems[0].Tag = item;
+            int index = 0;
+            foreach(string subItem in item.ToStrings)
+            {
+                listView.SelectedItems[0].SubItems[index].Text = subItem;
+                index++;
+            }
         }
 
         public static EntityWrapper<T> GetItemForAdd<T>(this ListView listView)

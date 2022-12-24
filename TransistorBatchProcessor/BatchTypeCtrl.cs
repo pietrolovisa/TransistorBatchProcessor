@@ -26,7 +26,7 @@ namespace TransistorBatchProcessor
         {
             get
             {
-                _entityInfo.Entity = CreateEntityFromInput();
+                ResetEntityFromInput();
                 return _entityInfo;
             }
             set
@@ -49,13 +49,10 @@ namespace TransistorBatchProcessor
             InitializeComponent();
         }
 
-        protected BatchType CreateEntityFromInput()
+        protected void ResetEntityFromInput()
         {
-            return new BatchType
-            {
-               Name = textBoxName.Text,
-               Description = textBoxDescription.Text
-            };
+            _entityInfo.Entity.Name = textBoxName.Text;
+            _entityInfo.Entity.Description = textBoxDescription.Text;
         }
 
         public bool Validate(out string message)

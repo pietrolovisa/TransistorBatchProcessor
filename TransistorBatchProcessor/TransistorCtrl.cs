@@ -12,7 +12,7 @@ using TransisterBatch.EntityFramework.Domain;
 
 namespace TransistorBatchProcessor
 {
-    public partial class TransistorCtrl : UserControl //Base<Transistor>
+    public partial class TransistorCtrl : UserControl
     {
         protected EntityWrapper<Transistor> _entityInfo = default;
 
@@ -27,7 +27,7 @@ namespace TransistorBatchProcessor
         {
             get
             {
-                _entityInfo.Entity = CreateEntityFromInput();
+                ResetEntityFromInput();
                 return _entityInfo;
             }
             set
@@ -48,31 +48,33 @@ namespace TransistorBatchProcessor
         public TransistorCtrl()
         {
             InitializeComponent();
-            UpdateEnabled(true);
+            textBoxIdx.ReadOnly = true;
         }
 
-        protected Transistor CreateEntityFromInput()
+        protected void ResetEntityFromInput()
         {
-            return new Transistor
-            {
-                Idx = long.Parse(textBoxIdx.Text),
-                HEF = double.Parse(textBoxHEF.Text),
-                Beta = double.Parse(textBoxBeta.Text)
-            };
+            _entityInfo.Entity.Idx = long.Parse(textBoxIdx.Text);
+            _entityInfo.Entity.HEF = double.Parse(textBoxHEF.Text);
+            _entityInfo.Entity.Beta = double.Parse(textBoxBeta.Text);
         }
 
         public bool Validate(out string message)
         {
-            message = string.Empty;
-            return true;
-        }
-
-        public void UpdateEnabled(bool enabled)
-        {
-            Editable = enabled;
-            textBoxIdx.ReadOnly = true;
-            textBoxHEF.ReadOnly = !Editable;
-            textBoxBeta.ReadOnly = !Editable;
+            if(!double.TryParse(textBoxHEF.Text, out double _))
+            {
+                message = $"{nameof(Transistor.HEF)} is invalid.";
+                return false;
+            }
+            else if (!double.TryParse(textBoxBeta.Text, out double _))
+            {
+                message = $"{nameof(Transistor.Beta)} is invalid.";
+                return false;
+            }
+            else
+            {
+                message = string.Empty;
+                return true;
+            }
         }
 
         protected void PopulateInputFromEntity()

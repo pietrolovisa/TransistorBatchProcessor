@@ -13,8 +13,12 @@ using TransistorBatchProcessor.Extensions;
 
 namespace TransistorBatchProcessor
 {
-    public partial class BatchManagement : UserControl
+    public partial class BatchManagement : UserControl, IManagementTool
     {
+        public string DisplayName => "Batch Management";
+
+        public event EventHandler<NotificationEventArgs> OnNotify;
+
         private readonly IBatchTypeRepository _batchTypeRepository;
         private readonly IBatchRepository _batchRepository;
         private readonly ITransistorRepository _transistorRepository;
@@ -40,7 +44,7 @@ namespace TransistorBatchProcessor
 
         private void InitializeControls()
         {
-            listView1.InitListView(new ListViewColumnSorter(), ListView1_SelectedIndexChanged,
+            listView1.InitListView(new ListViewColumnSorter(), ListViewSelectedIndexChanged,
                 new Dictionary<string, int>
                 {
                     { nameof(Batch.Id), 0 },
@@ -49,18 +53,20 @@ namespace TransistorBatchProcessor
                 });
         }
 
-        private void ListView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewSelectedIndexChanged(object sender, EventArgs e)
         {
             batchCtrl1.ResetBatchTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
             if (listView1.HasSelectedItem())
             {
                 batchCtrl1.EntityInfo = listView1.GetItemForUpdate<Batch>();
                 buttonAddOrUpdate.Text = "Update";
+                buttonRemove.Enabled = true;
             }
             else
             {
                 batchCtrl1.EntityInfo = listView1.GetItemForAdd<Batch>();
                 buttonAddOrUpdate.Text = "Add";
+                buttonRemove.Enabled = false;
             }
         }
 
@@ -70,8 +76,8 @@ namespace TransistorBatchProcessor
             {
                 IncludeBatchType = true
             }).GetAwaiter().GetResult());
-
             batchCtrl1.LoadTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
+            ListViewSelectedIndexChanged(null, null);
         }
 
         private void Remove_Click(object sender, EventArgs e)
@@ -81,6 +87,7 @@ namespace TransistorBatchProcessor
             if (dialogResult == DialogResult.OK)
             {
                 _batchRepository.Delete(batch).GetAwaiter().GetResult();
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchRemoved);
             }
         }
 
@@ -88,19 +95,36 @@ namespace TransistorBatchProcessor
         {
             if (batchCtrl1.Validate(out string message))
             {
+                Batch batch = batchCtrl1.EntityInfo.Entity;
                 if (batchCtrl1.EntityInfo.State == EditState.New)
                 {
-
+                    _batchRepository.Insert(batch).GetAwaiter().GetResult();
+                    batch = _batchRepository.FindByKey(batch.Id, new BatchQueryFilter
+                    {
+                        IncludeBatchType = true
+                    }).GetAwaiter().GetResult();
+                    listView1.AddItemToView<Batch>(batch, true);
+                    OnNotify?.Invoke(this, NotificationEventArgs.BatchAdded);
                 }
                 else
                 {
-
+                    _batchRepository.Update(batch).GetAwaiter().GetResult();
+                    batch = _batchRepository.FindByKey(batch.Id, new BatchQueryFilter
+                    {
+                        IncludeBatchType = true
+                    }).GetAwaiter().GetResult();
+                    listView1.SetItemAfterUpdate<Batch>(batch);
                 }
             }
             else
             {
                 MessageBox.Show(message, "Error", MessageBoxButtons.OK);
             }
+        }
+
+        public void HandleEvent(NotificationEventArgs args)
+        {
+
         }
     }
 }

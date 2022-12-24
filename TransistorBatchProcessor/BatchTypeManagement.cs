@@ -13,8 +13,12 @@ using TransistorBatchProcessor.Extensions;
 
 namespace TransistorBatchProcessor
 {
-    public partial class BatchTypeManagement : UserControl
+    public partial class BatchTypeManagement : UserControl, IManagementTool
     {
+        public string DisplayName => "Batch Type Management";
+
+        public event EventHandler<NotificationEventArgs> OnNotify;
+
         private readonly IBatchTypeRepository _batchTypeRepository;
         private readonly IBatchRepository _batchRepository;
         private readonly ITransistorRepository _transistorRepository;
@@ -40,7 +44,7 @@ namespace TransistorBatchProcessor
 
         private void InitializeControls()
         {
-            listView1.InitListView(new ListViewColumnSorter(), ListView1_SelectedIndexChanged,
+            listView1.InitListView(new ListViewColumnSorter(), ListViewSelectedIndexChanged,
                 new Dictionary<string, int>
                 {
                     { nameof(BatchType.Id), 0 },
@@ -49,7 +53,7 @@ namespace TransistorBatchProcessor
                 });
         }
 
-        private void ListView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewSelectedIndexChanged(object sender, EventArgs e)
         {
             if (listView1.HasSelectedItem())
             {
@@ -68,6 +72,7 @@ namespace TransistorBatchProcessor
         public void InitializeView()
         {
             listView1.LoadItems<BatchType>(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
+            ListViewSelectedIndexChanged(null, null);
         }
 
         private void Remove_Click(object sender, EventArgs e)
@@ -84,19 +89,27 @@ namespace TransistorBatchProcessor
         {
             if (batchTypeCtrl1.Validate(out string message))
             {
+                BatchType batchType = batchTypeCtrl1.EntityInfo.Entity;
                 if (batchTypeCtrl1.EntityInfo.State == EditState.New)
                 {
-
+                    _batchTypeRepository.Insert(batchType).GetAwaiter().GetResult();
+                    listView1.AddItemToView<BatchType>(batchType, true);
                 }
                 else
                 {
-
+                    _batchTypeRepository.Update(batchType).GetAwaiter().GetResult();
+                    listView1.SetItemAfterUpdate<BatchType>(batchType);
                 }
             }
             else
             {
                 MessageBox.Show(message, "Error", MessageBoxButtons.OK);
             }
+        }
+
+        public void HandleEvent(NotificationEventArgs args)
+        {
+
         }
     }
 }

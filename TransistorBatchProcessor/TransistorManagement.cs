@@ -13,8 +13,12 @@ using TransistorBatchProcessor.Extensions;
 
 namespace TransistorBatchProcessor
 {
-    public partial class TransistorManagement : UserControl
+    public partial class TransistorManagement : UserControl, IManagementTool
     {
+        public string DisplayName => "Transistor Management";
+
+        public event EventHandler<NotificationEventArgs> OnNotify;
+
         private readonly IBatchTypeRepository _batchTypeRepository;
         private readonly IBatchRepository _batchRepository;
         private readonly ITransistorRepository _transistorRepository;
@@ -42,7 +46,7 @@ namespace TransistorBatchProcessor
         private void InitializeControls()
         {
             comboBoxBatches.InitCombobox(ComboBoxBatches_SelectedIndexChanged, "Description");
-            listView1.InitListView(new ListViewColumnSorter(), ListView1_SelectedIndexChanged,
+            listView1.InitListView(new ListViewColumnSorter(), ListViewSelectedIndexChanged,
                 new Dictionary<string, int>
                 {
                         { nameof(Transistor.Id), 0 },
@@ -54,27 +58,16 @@ namespace TransistorBatchProcessor
 
         public void InitializeView()
         {
-            try
-            {
-                SupressEvents = true;
-                ResetBatches();
-            }
-            finally
-            {
-                SupressEvents = false;
-            }
-            if (comboBoxBatches.Items.Count > 0)
-            {
-                ComboBoxBatches_SelectedIndexChanged(null, null);
-            }
+            ResetBatches();
         }
 
-        private void ListView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewSelectedIndexChanged(object sender, EventArgs e)
         {
             if (listView1.HasSelectedItem())
             {
                 transistorCtrl1.EntityInfo = listView1.GetItemForUpdate<Transistor>();
                 buttonAddOrUpdate.Text = "Update";
+                buttonRemove.Enabled = true;
             }
             else
             {
@@ -88,19 +81,28 @@ namespace TransistorBatchProcessor
                     }
                 };
                 buttonAddOrUpdate.Text = "Add";
+                buttonRemove.Enabled = false;
             }
         }
 
-        private void ResetBatches(Batch selectedItem = null)
+        private void ResetBatches()
         {
-            List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
+            try
             {
-                IncludeBatchType = true
-            }).GetAwaiter().GetResult();
-            comboBoxBatches.DataSource = batches;
-            if (selectedItem != null)
+                SupressEvents = true;
+                List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
+                {
+                    IncludeBatchType = true
+                }).GetAwaiter().GetResult();
+                comboBoxBatches.DataSource = batches;
+                if (ActiveBatch != null)
+                {
+                    comboBoxBatches.SelectedValue = ActiveBatch.Id;
+                }
+            }
+            finally
             {
-                comboBoxBatches.SelectedValue = selectedItem.Id;
+                SupressEvents = false;
             }
         }
 
@@ -140,23 +142,55 @@ namespace TransistorBatchProcessor
 
         private void Remove_Click(object sender, EventArgs e)
         {
-
+            Transistor transistor = listView1.GetItemForUpdate<Transistor>().Entity;
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to remove transistor {transistor.Idx}", "Delete", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                _transistorRepository.Delete(transistor).GetAwaiter().GetResult();
+            }
         }
 
         private void AddOrUpdate_Click(object sender, EventArgs e)
         {
-            if (transistorCtrl1.EntityInfo.State == EditState.New)
+            if (transistorCtrl1.Validate(out string message))
             {
-                Transistor transistor = transistorCtrl1.EntityInfo.Entity;
-                transistor.BatchId = ActiveBatch.Id;
-                _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
-                ActiveBatch.Transistors.Add(transistor);
-                listView1.AddItemToView<Transistor>(transistor, true);
+                if (transistorCtrl1.EntityInfo.State == EditState.New)
+                {
+                    Transistor transistor = transistorCtrl1.EntityInfo.Entity;
+                    transistor.BatchId = ActiveBatch.Id;
+                    _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
+                    ActiveBatch.Transistors.Add(transistor);
+                    listView1.AddItemToView<Transistor>(transistor, true);
+                }
+                else
+                {
+                    Transistor transistor = transistorCtrl1.EntityInfo.Entity;
+                    _transistorRepository.Update(transistor).GetAwaiter().GetResult();
+                    listView1.SetItemAfterUpdate<Transistor>(transistor);
+                }
             }
             else
             {
-
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
             }
         }
+
+        public void HandleEvent(NotificationEventArgs args)
+        {
+            if(args.Event == EventType.BatchAdded || args.Event == EventType.BatchRemoved)
+            {
+                ResetBatches();
+            }
+        }
+    }
+
+    public interface IManagementTool
+    {
+        string DisplayName { get; }
+
+        void InitializeView();
+        void HandleEvent(NotificationEventArgs args);
+
+        event EventHandler<NotificationEventArgs> OnNotify;
     }
 }

@@ -28,7 +28,7 @@ namespace TransistorBatchProcessor
         {
             get
             {
-                _entityInfo.Entity = CreateEntityFromInput();
+                ResetEntityFromInput();
                 return _entityInfo;
             }
             set
@@ -57,14 +57,11 @@ namespace TransistorBatchProcessor
            
         }
 
-        protected Batch CreateEntityFromInput()
+        protected void ResetEntityFromInput()
         {
+            _entityInfo.Entity.Name = textBoxName.Text;
             BatchType batchType = comboBoxType.SelectedItem as BatchType;
-            return new Batch
-            {
-                Name = textBoxName.Text,
-                BatchTypeId = batchType.Id
-            };
+            _entityInfo.Entity.BatchTypeId = batchType.Id;
         }
 
         protected void PopulateInputFromEntity()
