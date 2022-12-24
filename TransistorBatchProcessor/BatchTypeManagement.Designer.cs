@@ -60,7 +60,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listView1.Location = new System.Drawing.Point(15, 15);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(524, 345);
+            this.listView1.Size = new System.Drawing.Size(504, 402);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -80,7 +80,7 @@
             this.Controls.Add(this.buttonAddOrUpdate);
             this.Controls.Add(this.listView1);
             this.Name = "BatchTypeManagement";
-            this.Size = new System.Drawing.Size(834, 377);
+            this.Size = new System.Drawing.Size(943, 436);
             this.ResumeLayout(false);
 
         }

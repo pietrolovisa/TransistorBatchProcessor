@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(881, 711);
             this.Name = "TransistorBatchForm";
             this.Text = "TransistorBatchForm";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 
         }

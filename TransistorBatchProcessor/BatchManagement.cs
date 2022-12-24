@@ -48,8 +48,8 @@ namespace TransistorBatchProcessor
                 new Dictionary<string, int>
                 {
                     { nameof(Batch.Id), 0 },
-                    { nameof(Batch.Name), 100 },
-                    { nameof(Batch.Type), 100 }
+                    { nameof(Batch.Name), 140 },
+                    { nameof(Batch.Type), 140 }
                 });
         }
 

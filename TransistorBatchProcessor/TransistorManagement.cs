@@ -50,9 +50,9 @@ namespace TransistorBatchProcessor
                 new Dictionary<string, int>
                 {
                         { nameof(Transistor.Id), 0 },
-                        { nameof(Transistor.Idx), 100 },
-                        { nameof(Transistor.HEF), 100 },
-                        { nameof(Transistor.Beta), 100 }
+                        { nameof(Transistor.Idx), 140 },
+                        { nameof(Transistor.HEF), 140 },
+                        { nameof(Transistor.Beta), 140 }
                 });
         }
 

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Forms;
-using TransisterBatch.EntityFramework.Domain;
+﻿using TransisterBatch.EntityFramework.Domain;
 
 namespace TransistorBatchProcessor.Extensions
 {

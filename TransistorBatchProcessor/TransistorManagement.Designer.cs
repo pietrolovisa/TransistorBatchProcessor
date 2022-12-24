@@ -66,9 +66,9 @@
             // 
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.listView1.Location = new System.Drawing.Point(18, 62);
+            this.listView1.Location = new System.Drawing.Point(15, 62);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(525, 251);
+            this.listView1.Size = new System.Drawing.Size(525, 355);
             this.listView1.TabIndex = 8;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -76,7 +76,7 @@
             // 
             this.comboBoxBatches.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBatches.FormattingEnabled = true;
-            this.comboBoxBatches.Location = new System.Drawing.Point(18, 17);
+            this.comboBoxBatches.Location = new System.Drawing.Point(15, 17);
             this.comboBoxBatches.Name = "comboBoxBatches";
             this.comboBoxBatches.Size = new System.Drawing.Size(274, 28);
             this.comboBoxBatches.TabIndex = 7;
@@ -91,7 +91,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.comboBoxBatches);
             this.Name = "TransistorManagement";
-            this.Size = new System.Drawing.Size(917, 332);
+            this.Size = new System.Drawing.Size(943, 436);
             this.ResumeLayout(false);
 
         }
