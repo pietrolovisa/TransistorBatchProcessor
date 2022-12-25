@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TransistorBatchProcessor.Extensions;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace TransistorBatchProcessor
 {
@@ -48,30 +51,38 @@ namespace TransistorBatchProcessor
         public int Compare(object x, object y)
         {
             int compareResult;
-            ListViewItem listviewX, listviewY;
+            ListViewItem listviewX = (ListViewItem)x;
+            ListViewItem listviewY = (ListViewItem)y;
 
-            // Cast the objects to be compared to ListViewItem objects
-            listviewX = (ListViewItem)x;
-            listviewY = (ListViewItem)y;
-
-            // Compare the two items
-            compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
-
-            // Calculate correct return value based on object comparison
-            if (OrderOfSort == SortOrder.Ascending)
+            ColumnHeaderType t = (ColumnHeaderType) listviewX.ListView.Columns[ColumnToSort].Tag;
+            if (t == ColumnHeaderType.numeric)
             {
-                // Ascending sort is selected, return normal result of compare operation
-                return compareResult;
+                double.TryParse(listviewX.SubItems[ColumnToSort].Text, out double value1);
+                double.TryParse(listviewY.SubItems[ColumnToSort].Text, out double value2);
+                if (OrderOfSort == SortOrder.Ascending)
+                {
+                    return value1.CompareTo(value2);
+                }
+                else
+                {
+                    return value2.CompareTo(value1);
+                }
             }
-            else if (OrderOfSort == SortOrder.Descending)
+            else // if (t == ColumnHeaderType.text)
             {
-                // Descending sort is selected, return negative result of compare operation
-                return (-compareResult);
-            }
-            else
-            {
-                // Return '0' to indicate they are equal
-                return 0;
+                compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+                if (OrderOfSort == SortOrder.Ascending)
+                {
+                    return compareResult;
+                }
+                else if (OrderOfSort == SortOrder.Descending)
+                {
+                    return (-compareResult);
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 

@@ -2,6 +2,12 @@
 
 namespace TransistorBatchProcessor.Extensions
 {
+    public enum ColumnHeaderType
+    {
+        text,
+        numeric
+    }
+
     public static class ControlExtensions
     {
         public static void AddTab(this TabControl tabControl, Control control, string name)
@@ -24,7 +30,7 @@ namespace TransistorBatchProcessor.Extensions
         }
 
         public static void InitListView(this ListView listView, System.Collections.IComparer columnSorter, 
-            EventHandler selectedIndexChanged, Dictionary<string, int> columns)
+            EventHandler selectedIndexChanged, List<Tuple<string, int, ColumnHeaderType>> columns)
         {
             listView.GridLines = true;
             listView.FullRowSelect = true;
@@ -34,10 +40,22 @@ namespace TransistorBatchProcessor.Extensions
             listView.ListViewItemSorter = columnSorter;
             listView.ColumnClick += (s, e) => { listView.Sort(e); };
             listView.SelectedIndexChanged += selectedIndexChanged;
-            foreach(KeyValuePair<string, int> column in columns)
+            foreach(Tuple<string, int, ColumnHeaderType> column in columns)
             {
-                listView.Columns.Add(column.Key, column.Value, HorizontalAlignment.Left);
+                listView.Columns.Add(new ColumnHeader
+                {
+                    Text = column.Item1,
+                    Width = column.Item2,
+                    TextAlign = HorizontalAlignment.Left,
+                    Tag = column.Item3
+                });
             }
+        }
+
+        public static void ResetSortOrder(this ListView listView, int column = 1)
+        {
+            (listView.ListViewItemSorter as ListViewColumnSorter).Order = SortOrder.Descending;
+            listView.Sort(new ColumnClickEventArgs(column));
         }
 
         public static void Sort(this ListView listView, ColumnClickEventArgs e)

@@ -21,57 +21,21 @@ namespace TransisterBatchCore
             try
             {
                 result.Data = new TransistorGroupDiscovery();
-                //ExcelWorksheet worksheet = Package.Workbook.Worksheets[batchLoadArgs.Name];
-                //if (worksheet != null)
-                //{
-                //    int index = batchLoadArgs.StartRow;
-                //    bool endOfFile = false;
-                //    while (!endOfFile)
-                //    {
-                foreach(Transistor transistor in batch.Transistors)
-                { 
-                        //TransisterSettings transisterSettings = new TransisterSettings
-                        //{
-                        //    Key = worksheet.GetCellAsInt(index, batchLoadArgs.KeyColumn),
-                        //    HFE = worksheet.GetCellAsDouble(index, batchLoadArgs.HefColumn),
-                        //    Beta = worksheet.GetCellAsDouble(index, batchLoadArgs.BetaColumn),
-                        //    Source = new TransisterSettingsSource
-                        //    {
-                        //        Name = batchLoadArgs.Name,
-                        //        Row = index
-                        //    }
-                        //};
-                        //endOfFile = transisterSettings.EndOfFile;
-                        //if (!endOfFile)
-                        //{
-                        //    result.Data.ItemCount++;
-                        //    index++;
-                        //    if (transisterSettings.HasErrors)
-                        //    {
-                        //        result.Data.Errors.Add(transisterSettings);
-                        //    }
-                        //    else
-                        //    {
-                         result.Data.Discovery.Add(transistor);
-                        //    }
-                        //}
-                    }
-                    result.Data.Discovery = new TransistorGroup(result.Data.Discovery.OrderBy(d => d.HEF));
-                    List<TransistorGroup> batches = result.Data.Discovery.Process(groupLoadArgs);
-                    result.Data.Matches = batches
-                        .Where(b => b.Count > 1)
-                        .OrderBy(b => b[0].Idx)
-                        .ToList();
-                    result.Data.Outliers = batches
-                        .Where(b => b.Count == 1)
-                        .OrderBy(b => b[0].Idx)
-                        .ToList();
-                    result.Message = $"Successfully loaded batch data and found [{result.Data.Discovery.Count}] items";
-                //}
-                //else
-                //{
-                //    result.SetError($"Failed to load transister batch data. Worksheet [{batchLoadArgs.Name}] is invalid.");
-                //}
+                foreach (Transistor transistor in batch.Transistors)
+                {
+                    result.Data.Discovery.Add(transistor);
+                }
+                result.Data.Discovery = new TransistorGroup(result.Data.Discovery.OrderBy(d => d.HEF));
+                List<TransistorGroup> batches = result.Data.Discovery.Process(groupLoadArgs);
+                result.Data.Matches = batches
+                    .Where(b => b.Count > 1)
+                    .OrderBy(b => b[0].Idx)
+                    .ToList();
+                result.Data.Outliers = batches
+                    .Where(b => b.Count == 1)
+                    .OrderBy(b => b[0].Idx)
+                    .ToList();
+                result.Message = $"Successfully loaded batch data and found [{result.Data.Discovery.Count}] items";
             }
             catch (Exception ex)
             {

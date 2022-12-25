@@ -22,7 +22,7 @@ namespace TransistorBatchProcessor
         private readonly IBatchRepository _batchRepository;
         private readonly ITransistorRepository _transistorRepository;
 
-        private System.Windows.Forms.TabControl TabCtrl { get; set; }
+        private TabControl TabCtrl { get; set; }
 
         private List<IManagementTool> ManagementTools { get; set; }
  
@@ -37,19 +37,19 @@ namespace TransistorBatchProcessor
 
             ManagementTools = new List<IManagementTool>();
 
+            Processor processor = new Processor(_batchRepository, _batchTypeRepository, _transistorRepository)
+            {
+                Dock = DockStyle.Fill
+            };
+            processor.OnNotify += ManagementToolsOnNotify;
+            ManagementTools.Add(processor);
+
             TransistorManagement transistorManagementCtrl = new TransistorManagement(_batchRepository, _batchTypeRepository, _transistorRepository)
             {
                 Dock = DockStyle.Fill
             };
             transistorManagementCtrl.OnNotify += ManagementToolsOnNotify;
             ManagementTools.Add(transistorManagementCtrl);
-
-            BatchTypeManagement batchTypeManagementCtrl = new BatchTypeManagement(_batchRepository, _batchTypeRepository, _transistorRepository)
-            {
-                Dock = DockStyle.Fill,
-            };
-            batchTypeManagementCtrl.OnNotify += ManagementToolsOnNotify;
-            ManagementTools.Add(batchTypeManagementCtrl);
 
             BatchManagement abtchManagementCtrl = new BatchManagement(_batchRepository, _batchTypeRepository, _transistorRepository)
             {
@@ -58,12 +58,12 @@ namespace TransistorBatchProcessor
             abtchManagementCtrl.OnNotify += ManagementToolsOnNotify;
             ManagementTools.Add(abtchManagementCtrl);
 
-            Processor processor = new Processor(_batchRepository, _batchTypeRepository, _transistorRepository)
+            BatchTypeManagement batchTypeManagementCtrl = new BatchTypeManagement(_batchRepository, _batchTypeRepository, _transistorRepository)
             {
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
             };
-            processor.OnNotify += ManagementToolsOnNotify;
-            ManagementTools.Add(processor);
+            batchTypeManagementCtrl.OnNotify += ManagementToolsOnNotify;
+            ManagementTools.Add(batchTypeManagementCtrl);
 
             InitializeComponent();
         }

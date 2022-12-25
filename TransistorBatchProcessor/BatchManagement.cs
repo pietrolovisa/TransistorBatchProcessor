@@ -45,11 +45,11 @@ namespace TransistorBatchProcessor
         private void InitializeControls()
         {
             listView1.InitListView(new ListViewColumnSorter(), ListViewSelectedIndexChanged,
-                new Dictionary<string, int>
+                new List<Tuple<string, int, ColumnHeaderType>>
                 {
-                    { nameof(Batch.Id), 0 },
-                    { nameof(Batch.Name), 140 },
-                    { nameof(Batch.Type), 140 }
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Batch.Id), 0, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Batch.Name), 140, ColumnHeaderType.text) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Batch.Type), 140, ColumnHeaderType.text) }
                 });
         }
 
@@ -76,6 +76,7 @@ namespace TransistorBatchProcessor
             {
                 IncludeBatchType = true
             }).GetAwaiter().GetResult());
+            listView1.ResetSortOrder();
             batchCtrl1.LoadTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
             ListViewSelectedIndexChanged(null, null);
         }

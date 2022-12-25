@@ -125,6 +125,23 @@ namespace TransistorBatchProcessor
             ActionResult<TransistorBatchDiscovery> loadBatchResult = Workspace.GenerateTransisterManifest(batchLoadArgs);
             if (loadBatchResult.Success)
             {
+
+                Batch batch = new Batch
+                {
+                    Name = "Raw Data",
+                    BatchTypeId = 1
+                };
+                _batchRepository.Insert(batch).GetAwaiter().GetResult();
+                foreach (TransisterSettings t in loadBatchResult.Data.Discovery)
+                {
+                    _transistorRepository.Insert(new Transistor
+                    {
+                        Idx = t.Key,
+                        HEF = t.HFE,
+                        Beta = t.Beta,
+                        BatchId = batch.Id
+                    }).GetAwaiter().GetResult();
+                }
                 WriteFeedback($"Successfully loaded batch data from worksheet [{batchLoadArgs.Name}]");
                 WriteFeedback($"Found [{loadBatchResult.Data.ItemCount}] item(s).", 1);
                 WriteFeedback($"Found [{loadBatchResult.Data.Errors.Count}] item(s) with errors.", 1);

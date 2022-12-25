@@ -49,12 +49,12 @@ namespace TransistorBatchProcessor
         {
             comboBoxBatches.InitCombobox(ComboBoxBatches_SelectedIndexChanged, "Description");
             listView1.InitListView(new ListViewColumnSorter(), ListViewSelectedIndexChanged,
-                new Dictionary<string, int>
+                new List<Tuple<string, int, ColumnHeaderType>>
                 {
-                        { nameof(Transistor.Id), 0 },
-                        { nameof(Transistor.Idx), 140 },
-                        { nameof(Transistor.HEF), 140 },
-                        { nameof(Transistor.Beta), 140 }
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.Id), 0, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.Idx), 140, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.HEF), 140, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.Beta), 140, ColumnHeaderType.numeric) }
                 });
         }
 
@@ -72,23 +72,6 @@ namespace TransistorBatchProcessor
                 IncludeBatchType = true,
                 IncludeTransistors = true
             }).GetAwaiter().GetResult();
-            //LoadTransistors();
-            //if (listView1.Items.Count > 0)
-            //{
-            //    listView1.Items[0].ForceSelected();
-            //}
-            //else
-            //{
-            //    transistorCtrl1.EntityInfo = new EntityWrapper<Transistor>
-            //    {
-            //        State = EditState.New,
-            //        Entity = new Transistor
-            //        {
-            //            Idx = 1
-            //        }
-            //    };
-            //    buttonAddOrUpdate.Text = "Add";
-            //}
         }
 
         public void HandleEvent(NotificationEventArgs args)
@@ -106,46 +89,46 @@ namespace TransistorBatchProcessor
 
         private void ResetBatches()
         {
-            try
+            List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
             {
-                SupressEvents = true;
-                List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
-                {
-                    IncludeBatchType = true
-                }).GetAwaiter().GetResult();
-                comboBoxBatches.DataSource = batches;
-                if (ActiveBatch != null)
-                {
-                    comboBoxBatches.SelectedValue = ActiveBatch.Id;
-                }
-            }
-            finally
+                IncludeBatchType = true
+            }).GetAwaiter().GetResult();
+            comboBoxBatches.DataSource = batches;
+            if (ActiveBatch != null)
             {
-                SupressEvents = false;
+                comboBoxBatches.SelectedValue = ActiveBatch.Id;
             }
         }
 
         private void buttonProcessBatch_Click(object sender, EventArgs e)
         {
             IBatchProcessor batchProcessor = new BatchProcessor();
-            ActionResult<TransistorGroupDiscovery> result = batchProcessor.GenerateTransisterManifest(ActiveBatch, new TransistorGroupLoadArgs());
+            TransistorGroupLoadArgs args = new TransistorGroupLoadArgs
+            {
+                BetaTolerance = (double)numericUpDownBetaTolerance.Value,
+                HefTolerance = (int)numericUpDownHefTolerance.Value
+            };
+
+            ActionResult<TransistorGroupDiscovery> result = batchProcessor.GenerateTransisterManifest(ActiveBatch, args);
 
             listView1.Items.Clear();
             int index = 1;
             foreach (TransistorGroup group in result.Data.Matches)
             {
-                ListViewGroup listViewGroup = new ListViewGroup($"Group {index}", HorizontalAlignment.Left);
+                ListViewGroup listViewGroup = new ListViewGroup($"Group {index} ({group.Count})", HorizontalAlignment.Left);
                 listView1.Groups.Add(listViewGroup);
                 group.ForEach(t => listView1.AddItemToView<Transistor>(t, listViewGroup));
                 index++;
             }
 
-            ListViewGroup outlierListViewGroup = new ListViewGroup($"Outliers", HorizontalAlignment.Left);
+            ListViewGroup outlierListViewGroup = new ListViewGroup($"Outliers ({result.Data.Outliers.Count})", HorizontalAlignment.Left);
             listView1.Groups.Add(outlierListViewGroup);
             foreach (TransistorGroup group in result.Data.Outliers)
             {
                 group.ForEach(t => listView1.AddItemToView<Transistor>(t, outlierListViewGroup));
             }
+
+            listView1.ResetSortOrder();
         }
     }
 }

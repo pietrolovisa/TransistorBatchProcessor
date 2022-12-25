@@ -47,12 +47,12 @@ namespace TransistorBatchProcessor
         {
             comboBoxBatches.InitCombobox(ComboBoxBatches_SelectedIndexChanged, "Description");
             listView1.InitListView(new ListViewColumnSorter(), ListViewSelectedIndexChanged,
-                new Dictionary<string, int>
+                new List<Tuple<string, int, ColumnHeaderType>>
                 {
-                        { nameof(Transistor.Id), 0 },
-                        { nameof(Transistor.Idx), 140 },
-                        { nameof(Transistor.HEF), 140 },
-                        { nameof(Transistor.Beta), 140 }
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.Id), 0, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.Idx), 140, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.HEF), 140, ColumnHeaderType.numeric) },
+                    { new Tuple<string, int, ColumnHeaderType>(nameof(Transistor.Beta), 140, ColumnHeaderType.numeric) }
                 });
         }
 
@@ -138,6 +138,7 @@ namespace TransistorBatchProcessor
         private void LoadTransistors()
         {
             listView1.LoadItems<Transistor>(ActiveBatch.Transistors);
+            listView1.ResetSortOrder();
         }
 
         private void Remove_Click(object sender, EventArgs e)
