@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TransisterBatch.EntityFramework.Extensions;
 
 namespace TransisterBatch.EntityFramework
 {
@@ -9,19 +11,19 @@ namespace TransisterBatch.EntityFramework
         public const string RESOURCE_BROKER_MANAGEMENT_SCHEMA = "ResourceBrokerManagement";
         public const string MIGRATIONS_TABLE_NAME = "Migration";
 
-        private readonly DatabaseSettings _configuration;
+        private readonly IConfiguration _configuration;
 
-        public SqliteDbProvider(DatabaseSettings configuration)
+        public SqliteDbProvider(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         public void SetupServices<TDbContext>(IServiceCollection services) where TDbContext : DbContext
         {
-            //DatabaseSettings databaseSettings = _configuration.GetDatabaseSettings();
+            DatabaseSettings databaseSettings = _configuration.GetDatabaseSettings();
             services.AddEntityFrameworkSqlite().AddDbContext<TDbContext>((sp, options) =>
             {
-                options.UseSqlite(_configuration.ConnectionString, optionsAction =>
+                options.UseSqlite(databaseSettings.ConnectionString, optionsAction =>
                     optionsAction.MigrationsHistoryTable(MIGRATIONS_TABLE_NAME)
                 );
                 options.UseInternalServiceProvider(sp);

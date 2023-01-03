@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using TransisterBatch.EntityFramework;
 using TransisterBatch.EntityFramework.Extensions;
 
@@ -6,6 +7,8 @@ namespace TransistorBatchProcessor
 {
     internal static class Program
     {
+        public static IConfiguration _configuration;
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -15,6 +18,10 @@ namespace TransistorBatchProcessor
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            _configuration = builder.Build();
 
             ServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
@@ -26,12 +33,7 @@ namespace TransistorBatchProcessor
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            DatabaseSettings configuration = new DatabaseSettings
-            {
-                Provider = "Sqlite",
-                ConnectionString = "Data Source=C:\\Users\\plovisa\\source\\repos\\TransistorBatchProcessor\\TransistorBatchProcessor\\Database\\TransistorBatch.db;Cache=Shared"
-            };
-            services.SetupDatabase<EFContext>(configuration);
+            services.SetupDatabase<EFContext>(_configuration);
             services.AddScoped<Form1>();
             services.AddScoped<TransistorBatchForm>();
         }
