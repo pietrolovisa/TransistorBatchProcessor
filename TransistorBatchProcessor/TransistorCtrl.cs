@@ -51,6 +51,12 @@ namespace TransistorBatchProcessor
             textBoxIdx.ReadOnly = true;
         }
 
+        public void Toggle(bool enabled)
+        {
+            textBoxHEF.ReadOnly = !enabled;
+            textBoxBeta.ReadOnly = !enabled;
+        }
+
         protected void ResetEntityFromInput()
         {
             _entityInfo.Entity.Idx = long.Parse(textBoxIdx.Text);
@@ -79,10 +85,19 @@ namespace TransistorBatchProcessor
 
         protected void PopulateInputFromEntity()
         {
-            bool isNew = _entityInfo.State == EditState.New;
-            textBoxIdx.Text = _entityInfo.Entity.Idx.ToString();
-            textBoxHEF.Text = isNew ? string.Empty : _entityInfo.Entity.HEF.ToString();
-            textBoxBeta.Text = isNew ? string.Empty : _entityInfo.Entity.Beta.ToString();
+            if (_entityInfo == null)
+            {
+                textBoxIdx.Text = string.Empty;
+                textBoxHEF.Text = string.Empty;
+                textBoxBeta.Text = string.Empty;
+            }
+            else
+            {
+                bool isNew = _entityInfo.State == EditState.New;
+                textBoxIdx.Text = _entityInfo.Entity.Idx.ToString();
+                textBoxHEF.Text = isNew ? string.Empty : _entityInfo.Entity.HEF.ToString();
+                textBoxBeta.Text = isNew ? string.Empty : _entityInfo.Entity.Beta.ToString();
+            }
         }
     }
 }

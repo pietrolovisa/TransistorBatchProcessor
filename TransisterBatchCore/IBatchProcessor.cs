@@ -10,18 +10,18 @@ namespace TransisterBatchCore
 {
     public interface IBatchProcessor
     {
-        ActionResult<TransistorGroupDiscovery> GenerateTransisterManifest(Batch batch, TransistorGroupLoadArgs workSheetArgs);
+        ActionResult<TransistorGroupDiscovery> GenerateTransisterManifest(List<Transistor> transistors, TransistorGroupLoadArgs workSheetArgs);
     }
 
     public class BatchProcessor : IBatchProcessor
     {
-        public ActionResult<TransistorGroupDiscovery> GenerateTransisterManifest(Batch batch, TransistorGroupLoadArgs groupLoadArgs)
+        public ActionResult<TransistorGroupDiscovery> GenerateTransisterManifest(List<Transistor> transistors, TransistorGroupLoadArgs groupLoadArgs)
         {
             ActionResult<TransistorGroupDiscovery> result = new ActionResult<TransistorGroupDiscovery>();
             try
             {
                 result.Data = new TransistorGroupDiscovery();
-                foreach (Transistor transistor in batch.Transistors)
+                foreach (Transistor transistor in transistors)
                 {
                     result.Data.Discovery.Add(transistor);
                 }
@@ -45,12 +45,6 @@ namespace TransisterBatchCore
         }
     }
 
-    public class TransistorGroupLoadArgs
-    {
-        public double BetaTolerance { get; set; } = 0.001;
-        public int HefTolerance { get; set; } = 0;
-    }
-
     public class TransistorGroupDiscovery
     {
         public int ItemCount { get; set; }
@@ -60,45 +54,5 @@ namespace TransisterBatchCore
         public List<TransistorGroup> Outliers { get; set; } = new List<TransistorGroup>();
 
         public bool HasErrors => (Errors?.Count ?? 0) > 0;
-    }
-
-    public class TransistorGroup : List<Transistor>
-    {
-        public TransistorGroup()
-        {
-        }
-
-        public TransistorGroup(IEnumerable<Transistor> seed)
-            : base(seed)
-        {
-        }
-
-        public List<TransistorGroup> Process(TransistorGroupLoadArgs args)
-        {
-            List<TransistorGroup> batches = this
-                .GroupBy(ts => ts, new TransistorEqualityComparer
-                {
-                    BetaTolerance = args.BetaTolerance,
-                    HefTolerance = args.HefTolerance
-                })
-                .Select(grp => new TransistorGroup(grp.ToList()))
-                .OrderByDescending(grp => grp.Count)
-                .ToList();
-            return batches;
-        }
-    }
-
-    public class TransistorEqualityComparer : IEqualityComparer<Transistor>
-    {
-        public double BetaTolerance { get; set; } = 0.001;
-        public double HefTolerance { get; set; } = 0;
-
-        public bool Equals(Transistor x, Transistor y)
-        {
-            return x.HEF == y.HEF &&
-                x.Beta - BetaTolerance <= y.Beta && x.Beta + BetaTolerance > y.Beta;
-        }
-
-        public int GetHashCode(Transistor obj) => 1;
     }
 }

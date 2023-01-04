@@ -33,6 +33,9 @@
             this.transistorCtrl1 = new TransistorBatchProcessor.TransistorCtrl();
             this.listView1 = new System.Windows.Forms.ListView();
             this.comboBoxBatches = new System.Windows.Forms.ComboBox();
+            this.comboBoxState = new System.Windows.Forms.ComboBox();
+            this.labelListDetails = new System.Windows.Forms.Label();
+            this.buttonProcessBatch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonRemove
@@ -81,10 +84,40 @@
             this.comboBoxBatches.Size = new System.Drawing.Size(274, 28);
             this.comboBoxBatches.TabIndex = 7;
             // 
+            // comboBoxState
+            // 
+            this.comboBoxState.FormattingEnabled = true;
+            this.comboBoxState.Location = new System.Drawing.Point(295, 17);
+            this.comboBoxState.Name = "comboBoxState";
+            this.comboBoxState.Size = new System.Drawing.Size(245, 28);
+            this.comboBoxState.TabIndex = 12;
+            // 
+            // labelListDetails
+            // 
+            this.labelListDetails.AutoSize = true;
+            this.labelListDetails.Location = new System.Drawing.Point(561, 20);
+            this.labelListDetails.Name = "labelListDetails";
+            this.labelListDetails.Size = new System.Drawing.Size(50, 20);
+            this.labelListDetails.TabIndex = 13;
+            this.labelListDetails.Text = "label1";
+            // 
+            // buttonProcessBatch
+            // 
+            this.buttonProcessBatch.Location = new System.Drawing.Point(611, 270);
+            this.buttonProcessBatch.Name = "buttonProcessBatch";
+            this.buttonProcessBatch.Size = new System.Drawing.Size(203, 29);
+            this.buttonProcessBatch.TabIndex = 14;
+            this.buttonProcessBatch.Text = "Process batch ...";
+            this.buttonProcessBatch.UseVisualStyleBackColor = true;
+            this.buttonProcessBatch.Click += new System.EventHandler(this.buttonProcessBatch_Click);
+            // 
             // TransistorManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonProcessBatch);
+            this.Controls.Add(this.labelListDetails);
+            this.Controls.Add(this.comboBoxState);
             this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.buttonAddOrUpdate);
             this.Controls.Add(this.transistorCtrl1);
@@ -93,6 +126,7 @@
             this.Name = "TransistorManagement";
             this.Size = new System.Drawing.Size(943, 436);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -103,5 +137,8 @@
         private TransistorCtrl transistorCtrl1;
         private ListView listView1;
         private ComboBox comboBoxBatches;
+        private ComboBox comboBoxState;
+        private Label labelListDetails;
+        private Button buttonProcessBatch;
     }
 }

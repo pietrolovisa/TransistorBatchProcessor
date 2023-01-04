@@ -37,12 +37,12 @@ namespace TransistorBatchProcessor
 
             ManagementTools = new List<IManagementTool>();
 
-            Processor processor = new Processor(_batchRepository, _batchTypeRepository, _transistorRepository)
-            {
-                Dock = DockStyle.Fill
-            };
-            processor.OnNotify += ManagementToolsOnNotify;
-            ManagementTools.Add(processor);
+            //Processor processor = new Processor(_batchRepository, _batchTypeRepository, _transistorRepository)
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+            //processor.OnNotify += ManagementToolsOnNotify;
+            //ManagementTools.Add(processor);
 
             TransistorManagement transistorManagementCtrl = new TransistorManagement(_batchRepository, _batchTypeRepository, _transistorRepository)
             {

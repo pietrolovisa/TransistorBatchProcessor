@@ -52,6 +52,12 @@ namespace TransistorBatchProcessor.Extensions
             }
         }
 
+        public static void ClearAll(this ListView listView)
+        {
+            listView.Items.Clear();
+            listView.Groups.Clear();
+        }
+
         public static void ResetSortOrder(this ListView listView, int column = 1)
         {
             (listView.ListViewItemSorter as ListViewColumnSorter).Order = SortOrder.Descending;
