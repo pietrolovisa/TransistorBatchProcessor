@@ -1,4 +1,5 @@
-﻿using TransisterBatch.EntityFramework.Domain;
+﻿using System.Collections.Generic;
+using TransisterBatch.EntityFramework.Domain;
 
 namespace TransistorBatchProcessor.Extensions
 {
@@ -149,6 +150,24 @@ namespace TransistorBatchProcessor.Extensions
         public static bool HasSelectedItem(this ListView listView)
         {
             return listView.SelectedItems.Count > 0;
+        }
+
+        public static void DeleteSelected(this ListView listView)
+        {
+            int selected = listView.SelectedIndex();
+            if (selected > -1)
+            {
+                listView.Items.RemoveAt(selected);
+            }
+        }
+
+        public static int SelectedIndex(this ListView listView)
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                return listView.Items.IndexOf(listView.SelectedItems[0]);
+            }
+            return -1;
         }
 
         public static EntityWrapper<T> GetItemForUpdate<T>(this ListView listView)

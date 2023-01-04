@@ -30,6 +30,11 @@ namespace TransisterBatch.EntityFramework.Repository
             _dbSet = _dbContext.Set<TDomain>();
         }
 
+        public virtual void ClearTracker()
+        {
+            _dbContext.ChangeTracker.Clear();
+        }
+
         protected virtual async Task<int> SaveChangesAsync()
         {
             return await _dbContext.SaveChangesAsync();

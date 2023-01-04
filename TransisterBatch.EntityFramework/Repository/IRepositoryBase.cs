@@ -11,5 +11,7 @@ namespace TransisterBatch.EntityFramework.Repository
         Task<List<TDomain>> FindAll(TOptions queryFilter = default);
         Task<TDomain> FindWhereOne(Expression<Func<TDomain, bool>> predicate, TOptions queryFilter = default);
         Task<List<TDomain>> FindWhereMany(Expression<Func<TDomain, bool>> predicate, TOptions queryFilter = default);
+
+        void ClearTracker();
     }
 }

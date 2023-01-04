@@ -35,8 +35,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1339, 642);
+            this.MinimizeBox = false;
             this.Name = "TransistorProcessorForm";
-            this.Text = "TransistorProcessorForm";
+            this.Text = "Transistor Processor";
             this.ResumeLayout(false);
 
         }

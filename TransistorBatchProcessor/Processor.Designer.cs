@@ -61,7 +61,7 @@
             this.comboBoxBatches.Location = new System.Drawing.Point(35, 15);
             this.comboBoxBatches.Name = "comboBoxBatches";
             this.comboBoxBatches.Size = new System.Drawing.Size(274, 28);
-            this.comboBoxBatches.TabIndex = 8;
+            this.comboBoxBatches.TabIndex = 1;
             // 
             // listView1
             // 

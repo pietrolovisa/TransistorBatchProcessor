@@ -11,10 +11,18 @@ using System.Windows.Forms.VisualStyles;
 using TransisterBatch.EntityFramework.Domain;
 using TransisterBatch.EntityFramework.Repository;
 using TransistorBatchProcessor.Extensions;
+using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TransistorBatchProcessor
 {
+    public enum AddUpdateRestore
+    {
+        Add,
+        Update,
+        Restore
+    }
+
     public partial class TransistorManagement : UserControl, IManagementTool
     {
         public string DisplayName => "Transistor Management";
@@ -76,13 +84,13 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = listView1.GetItemForUpdate<Transistor>();
-                    ResetAddOrUpdateButton("Update", false);
+                    ResetAddOrUpdateButton(AddUpdateRestore.Restore, true);
                 }
                 else
                 {
                     transistorCtrl1.Toggle(true);
                     transistorCtrl1.EntityInfo = listView1.GetItemForUpdate<Transistor>();
-                    ResetAddOrUpdateButton("Update", true);
+                    ResetAddOrUpdateButton(AddUpdateRestore.Update, true);
                 }
                 buttonRemove.Enabled = true;
             }
@@ -92,7 +100,7 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = null;
-                    ResetAddOrUpdateButton("Add", false);
+                    ResetAddOrUpdateButton(AddUpdateRestore.Add, false);
                 }
                 else
                 {
@@ -110,15 +118,16 @@ namespace TransistorBatchProcessor
                             Idx = next
                         }
                     };
-                    ResetAddOrUpdateButton("Add", true);
+                    ResetAddOrUpdateButton(AddUpdateRestore.Add, true);
                 }
                 buttonRemove.Enabled = false;
             }
         }
 
-        private void ResetAddOrUpdateButton(string text, bool enabled)
+        private void ResetAddOrUpdateButton(AddUpdateRestore state, bool enabled)
         {
-            buttonAddOrUpdate.Text = text;
+            buttonAddOrUpdate.Tag = state;
+            buttonAddOrUpdate.Text = state.ToString();
             buttonAddOrUpdate.Enabled = enabled;
         }
 
@@ -219,6 +228,8 @@ namespace TransistorBatchProcessor
             if (dialogResult == DialogResult.OK)
             {
                 _transistorRepository.Delete(transistor).GetAwaiter().GetResult();
+                _transistorRepository.ClearTracker();
+                listView1.DeleteSelected();
             }
         }
 
@@ -226,19 +237,33 @@ namespace TransistorBatchProcessor
         {
             if (transistorCtrl1.Validate(out string message))
             {
-                if (transistorCtrl1.EntityInfo.State == EditState.New)
+                AddUpdateRestore state = (AddUpdateRestore)buttonAddOrUpdate.Tag;
+                if (state == AddUpdateRestore.Restore)
+                {
+                    Transistor transistor = listView1.GetItemForUpdate<Transistor>().Entity;
+                    DialogResult dialogResult = MessageBox.Show($"Are you sure you want to restore transistor {transistor.Idx} (remove from group only)?", "Restore", MessageBoxButtons.OKCancel);
+                    if (dialogResult == DialogResult.OK)
+                    {
+                        transistor.GroupId = null;
+                        transistor.LastUpdateDate = DateTime.UtcNow;
+                        _transistorRepository.Update(transistor).GetAwaiter().GetResult();
+                        listView1.DeleteSelected();
+                    }
+                }
+                else if (state == AddUpdateRestore.Add)
                 {
                     Transistor transistor = transistorCtrl1.EntityInfo.Entity;
                     transistor.BatchId = ActiveBatch.Id;
                     _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
                     listView1.AddItemToView<Transistor>(transistor, null, true);
                 }
-                else
+                else if (state == AddUpdateRestore.Update)
                 {
                     Transistor transistor = transistorCtrl1.EntityInfo.Entity;
                     _transistorRepository.Update(transistor).GetAwaiter().GetResult();
                     listView1.SetItemAfterUpdate<Transistor>(transistor);
                 }
+                _transistorRepository.ClearTracker();
             }
             else
             {
@@ -259,9 +284,8 @@ namespace TransistorBatchProcessor
             Batch batch = comboBoxBatches.SelectedItem as Batch;
             TransistorProcessorForm transistorProcessorForm = new TransistorProcessorForm(_batchTypeRepository, _batchRepository, _transistorRepository);
             transistorProcessorForm.LockToBatch(batch);
-            DialogResult dialogResult = transistorProcessorForm.ShowDialog(this);
-
+            transistorProcessorForm.ShowDialog(this);
+            ReloadTransistors();
         }
     }
-
 }

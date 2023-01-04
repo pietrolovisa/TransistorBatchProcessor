@@ -90,7 +90,6 @@ namespace TransistorBatchProcessor
                 IncludeBatchType = true
             }).GetAwaiter().GetResult();
             LoadTransistors();
-            //LoadMatched();
             ResetMatches();
         }
 
@@ -135,24 +134,6 @@ namespace TransistorBatchProcessor
             labelListDetails.Text = $"{transistors.Count} transistor(s)";
         }
 
-        //private void LoadMatched()
-        //{
-        //    listView2.ClearAll();
-        //    List<Transistor> transistors = _transistorRepository.FindByBatchIdAndMatched(ActiveBatch.Id).GetAwaiter().GetResult();
-        //    List<TransistorGroup> batches = transistors.GroupBy(t => t.GroupId)
-        //        .Select(grp => new TransistorGroup(grp.ToList()))
-        //        .OrderByDescending(grp => grp.Count)
-        //        .ToList();
-        //    int index = 1;
-        //    foreach (TransistorGroup group in batches)
-        //    {
-        //        ListViewGroup listViewGroup = new ListViewGroup($"Group {index} ({group.Count})", HorizontalAlignment.Left);
-        //        listView2.Groups.Add(listViewGroup);
-        //        group.ForEach(t => listView2.AddItemToView(t, listViewGroup));
-        //        index++;
-        //    }
-        //}
-
         private void ButtonProcessBatch_Click(object sender, EventArgs e)
         {
             IBatchProcessor batchProcessor = new BatchProcessor();
@@ -187,9 +168,9 @@ namespace TransistorBatchProcessor
                 ResetMatches(result.Data);
 
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine($"Found [{result.Data.ItemCount}] item(s).");
-                stringBuilder.AppendLine($"Found [{result.Data.Matches.Count}] match(es).");
-                stringBuilder.AppendLine($"Found [{result.Data.Outliers.Count}] outlier(s).");
+                stringBuilder.AppendLine($"Processed [{result.Data.Discovery.Count}] item(s).");
+                stringBuilder.AppendLine($"{Environment.NewLine}Found [{result.Data.Matches.Count}] match(es) containing [{result.Data.Matches.Sum(m => m.Count)}] transistor(s)");
+                stringBuilder.AppendLine($"{Environment.NewLine}Found [{result.Data.Outliers.Count}] outlier(s).");
                 labelShowMatchDetails.Text = stringBuilder.ToString();
             }
             else
@@ -203,13 +184,17 @@ namespace TransistorBatchProcessor
             if (ActiveDiscovery != null)
             {
                 _transistorRepository.UpdateGroups(ActiveDiscovery.Matches).GetAwaiter().GetResult();
-                LoadTransistors();
-                //LoadMatched();
-                ResetMatches();
+                _transistorRepository.ClearTracker();
+                ResetView();
             }
         }
 
         private void buttonReset_Click(object sender, EventArgs e)
+        {
+            ResetView();
+        }
+
+        private void ResetView()
         {
             labelShowMatchDetails.Text = string.Empty;
             listView2.ClearAll();

@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 711);
             this.Name = "TransistorBatchForm";
-            this.Text = "TransistorBatchForm";
+            this.Text = "Transistor Thingy For Sweet Jeff";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 
