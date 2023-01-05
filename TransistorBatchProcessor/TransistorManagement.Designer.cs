@@ -28,35 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonRemove = new System.Windows.Forms.Button();
-            this.buttonAddOrUpdate = new System.Windows.Forms.Button();
             this.transistorCtrl1 = new TransistorBatchProcessor.TransistorCtrl();
             this.listView1 = new System.Windows.Forms.ListView();
             this.comboBoxBatches = new System.Windows.Forms.ComboBox();
             this.comboBoxState = new System.Windows.Forms.ComboBox();
             this.labelListDetails = new System.Windows.Forms.Label();
-            this.buttonProcessBatch = new System.Windows.Forms.Button();
+            this.commandAndControl1 = new TransistorBatchProcessor.CommandAndControl();
             this.SuspendLayout();
-            // 
-            // buttonRemove
-            // 
-            this.buttonRemove.Location = new System.Drawing.Point(720, 228);
-            this.buttonRemove.Name = "buttonRemove";
-            this.buttonRemove.Size = new System.Drawing.Size(94, 29);
-            this.buttonRemove.TabIndex = 11;
-            this.buttonRemove.Text = "Remove";
-            this.buttonRemove.UseVisualStyleBackColor = true;
-            this.buttonRemove.Click += new System.EventHandler(this.Remove_Click);
-            // 
-            // buttonAddOrUpdate
-            // 
-            this.buttonAddOrUpdate.Location = new System.Drawing.Point(611, 228);
-            this.buttonAddOrUpdate.Name = "buttonAddOrUpdate";
-            this.buttonAddOrUpdate.Size = new System.Drawing.Size(94, 29);
-            this.buttonAddOrUpdate.TabIndex = 10;
-            this.buttonAddOrUpdate.Text = "Add";
-            this.buttonAddOrUpdate.UseVisualStyleBackColor = true;
-            this.buttonAddOrUpdate.Click += new System.EventHandler(this.AddOrUpdate_Click);
             // 
             // transistorCtrl1
             // 
@@ -71,7 +49,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listView1.Location = new System.Drawing.Point(15, 62);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(525, 355);
+            this.listView1.Size = new System.Drawing.Size(525, 395);
             this.listView1.TabIndex = 8;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -101,44 +79,36 @@
             this.labelListDetails.TabIndex = 13;
             this.labelListDetails.Text = "label1";
             // 
-            // buttonProcessBatch
+            // commandAndControl1
             // 
-            this.buttonProcessBatch.Location = new System.Drawing.Point(611, 270);
-            this.buttonProcessBatch.Name = "buttonProcessBatch";
-            this.buttonProcessBatch.Size = new System.Drawing.Size(203, 29);
-            this.buttonProcessBatch.TabIndex = 14;
-            this.buttonProcessBatch.Text = "Process batch ...";
-            this.buttonProcessBatch.UseVisualStyleBackColor = true;
-            this.buttonProcessBatch.Click += new System.EventHandler(this.buttonProcessBatch_Click);
+            this.commandAndControl1.Location = new System.Drawing.Point(649, 213);
+            this.commandAndControl1.Name = "commandAndControl1";
+            this.commandAndControl1.Size = new System.Drawing.Size(165, 356);
+            this.commandAndControl1.TabIndex = 15;
             // 
             // TransistorManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonProcessBatch);
+            this.Controls.Add(this.commandAndControl1);
             this.Controls.Add(this.labelListDetails);
             this.Controls.Add(this.comboBoxState);
-            this.Controls.Add(this.buttonRemove);
-            this.Controls.Add(this.buttonAddOrUpdate);
             this.Controls.Add(this.transistorCtrl1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.comboBoxBatches);
             this.Name = "TransistorManagement";
-            this.Size = new System.Drawing.Size(943, 436);
+            this.Size = new System.Drawing.Size(943, 476);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private Button buttonRemove;
-        private Button buttonAddOrUpdate;
         private TransistorCtrl transistorCtrl1;
         private ListView listView1;
         private ComboBox comboBoxBatches;
         private ComboBox comboBoxState;
         private Label labelListDetails;
-        private Button buttonProcessBatch;
+        private CommandAndControl commandAndControl1;
     }
 }

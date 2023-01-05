@@ -73,6 +73,112 @@ namespace TransistorBatchProcessor
             ResetBatches();
             ResetState();
             ReloadTransistors();
+            commandAndControl1.OnCommand += CommandAndControl1_OnCommand;
+        }
+
+        private void CommandAndControl1_OnCommand(object sender, CommandArgs e)
+        {
+            bool _ = e.Command switch
+            {
+                Command.Add => HandleAdd(),
+                Command.Update => HandleUpdate(),
+                Command.Remove => HandleRemove(),
+                Command.Restore => HandleRestore(),
+                Command.RestoreAll => HandleRestoreAll(),
+                Command.Process => HandleProcess(),
+                _ => throw new InvalidOperationException($"Command Type [{e.Command}] has no handler.")
+            };
+        }
+
+        private bool HandleAdd()
+        {
+            if (transistorCtrl1.Validate(out string message))
+            {
+                Transistor transistor = transistorCtrl1.EntityInfo.Entity;
+                transistor.BatchId = ActiveBatch.Id;
+                _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
+                _transistorRepository.ClearTracker();
+                listView1.AddItemToView<Transistor>(transistor, null, true);
+            }
+            else
+            {
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
+            }
+            return true;
+        }
+
+        private bool HandleUpdate()
+        {
+            if (transistorCtrl1.Validate(out string message))
+            {
+                Transistor transistor = transistorCtrl1.EntityInfo.Entity;
+                _transistorRepository.Update(transistor).GetAwaiter().GetResult();
+                _transistorRepository.ClearTracker();
+                listView1.SetItemAfterUpdate<Transistor>(transistor);
+            }
+            else
+            {
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
+            }
+            return true;
+        }
+
+        private bool HandleRemove()
+        {
+            Transistor transistor = listView1.GetItemForUpdate<Transistor>().Entity;
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to remove transistor {transistor.Idx}", "Delete", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                _transistorRepository.Delete(transistor).GetAwaiter().GetResult();
+                _transistorRepository.ClearTracker();
+                listView1.DeleteSelected();
+            }
+            return true;
+        }
+
+        private bool HandleRestore()
+        {
+            Transistor transistor = listView1.GetItemForUpdate<Transistor>().Entity;
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to restore transistor {transistor.Idx} (remove from group only)?",
+                "Restore", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                transistor.GroupId = null;
+                transistor.LastUpdateDate = DateTime.UtcNow;
+                _transistorRepository.Update(transistor).GetAwaiter().GetResult();
+                _transistorRepository.ClearTracker();
+                listView1.DeleteSelected();
+            }
+            return true;
+        }
+
+        private bool HandleRestoreAll()
+        {
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to restore all transistors (remove from groups only)?",
+                "Restore All", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    Transistor transistor = (Transistor)item?.Tag;
+                    transistor.GroupId = null;
+                    transistor.LastUpdateDate = DateTime.UtcNow;
+                    _transistorRepository.Update(transistor).GetAwaiter().GetResult();
+                }
+                _transistorRepository.ClearTracker();
+                listView1.ClearAll();
+            }
+            return true;
+        }
+
+        private bool HandleProcess()
+        {
+            Batch batch = comboBoxBatches.SelectedItem as Batch;
+            TransistorProcessorForm transistorProcessorForm = new TransistorProcessorForm(_batchTypeRepository, _batchRepository, _transistorRepository);
+            transistorProcessorForm.LockToBatch(batch);
+            transistorProcessorForm.ShowDialog(this);
+            ReloadTransistors();
+            return true;
         }
 
         private void ListViewSelectedIndexChanged(object sender, EventArgs e)
@@ -84,15 +190,14 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = listView1.GetItemForUpdate<Transistor>();
-                    ResetAddOrUpdateButton(AddUpdateRestore.Restore, true);
+                    commandAndControl1.ToggleCommands(Command.Restore | Command.RestoreAll | Command.Remove | Command.Process);
                 }
                 else
                 {
                     transistorCtrl1.Toggle(true);
                     transistorCtrl1.EntityInfo = listView1.GetItemForUpdate<Transistor>();
-                    ResetAddOrUpdateButton(AddUpdateRestore.Update, true);
+                    commandAndControl1.ToggleCommands(Command.Update | Command.Remove | Command.Process);
                 }
-                buttonRemove.Enabled = true;
             }
             else
             {
@@ -100,7 +205,7 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = null;
-                    ResetAddOrUpdateButton(AddUpdateRestore.Add, false);
+                    commandAndControl1.ToggleCommands(Command.RestoreAll | Command.Process);
                 }
                 else
                 {
@@ -118,17 +223,9 @@ namespace TransistorBatchProcessor
                             Idx = next
                         }
                     };
-                    ResetAddOrUpdateButton(AddUpdateRestore.Add, true);
+                    commandAndControl1.ToggleCommands(Command.Add | Command.Process);
                 }
-                buttonRemove.Enabled = false;
             }
-        }
-
-        private void ResetAddOrUpdateButton(AddUpdateRestore state, bool enabled)
-        {
-            buttonAddOrUpdate.Tag = state;
-            buttonAddOrUpdate.Text = state.ToString();
-            buttonAddOrUpdate.Enabled = enabled;
         }
 
         private void ResetState()
@@ -221,55 +318,6 @@ namespace TransistorBatchProcessor
                 ListViewSelectedIndexChanged(null, null);
             }
         }
-        private void Remove_Click(object sender, EventArgs e)
-        {
-            Transistor transistor = listView1.GetItemForUpdate<Transistor>().Entity;
-            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to remove transistor {transistor.Idx}", "Delete", MessageBoxButtons.OKCancel);
-            if (dialogResult == DialogResult.OK)
-            {
-                _transistorRepository.Delete(transistor).GetAwaiter().GetResult();
-                _transistorRepository.ClearTracker();
-                listView1.DeleteSelected();
-            }
-        }
-
-        private void AddOrUpdate_Click(object sender, EventArgs e)
-        {
-            if (transistorCtrl1.Validate(out string message))
-            {
-                AddUpdateRestore state = (AddUpdateRestore)buttonAddOrUpdate.Tag;
-                if (state == AddUpdateRestore.Restore)
-                {
-                    Transistor transistor = listView1.GetItemForUpdate<Transistor>().Entity;
-                    DialogResult dialogResult = MessageBox.Show($"Are you sure you want to restore transistor {transistor.Idx} (remove from group only)?", "Restore", MessageBoxButtons.OKCancel);
-                    if (dialogResult == DialogResult.OK)
-                    {
-                        transistor.GroupId = null;
-                        transistor.LastUpdateDate = DateTime.UtcNow;
-                        _transistorRepository.Update(transistor).GetAwaiter().GetResult();
-                        listView1.DeleteSelected();
-                    }
-                }
-                else if (state == AddUpdateRestore.Add)
-                {
-                    Transistor transistor = transistorCtrl1.EntityInfo.Entity;
-                    transistor.BatchId = ActiveBatch.Id;
-                    _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
-                    listView1.AddItemToView<Transistor>(transistor, null, true);
-                }
-                else if (state == AddUpdateRestore.Update)
-                {
-                    Transistor transistor = transistorCtrl1.EntityInfo.Entity;
-                    _transistorRepository.Update(transistor).GetAwaiter().GetResult();
-                    listView1.SetItemAfterUpdate<Transistor>(transistor);
-                }
-                _transistorRepository.ClearTracker();
-            }
-            else
-            {
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
-            }
-        }
 
         public void HandleEvent(NotificationEventArgs args)
         {
@@ -277,15 +325,6 @@ namespace TransistorBatchProcessor
             {
                 ResetBatches();
             }
-        }
-
-        private void buttonProcessBatch_Click(object sender, EventArgs e)
-        {
-            Batch batch = comboBoxBatches.SelectedItem as Batch;
-            TransistorProcessorForm transistorProcessorForm = new TransistorProcessorForm(_batchTypeRepository, _batchRepository, _transistorRepository);
-            transistorProcessorForm.LockToBatch(batch);
-            transistorProcessorForm.ShowDialog(this);
-            ReloadTransistors();
         }
     }
 }

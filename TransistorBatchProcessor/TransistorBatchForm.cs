@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 using TransisterBatch.EntityFramework.Domain;
 using TransisterBatch.EntityFramework.Repository;
 using TransistorBatchProcessor.Extensions;
@@ -68,6 +69,12 @@ namespace TransistorBatchProcessor
             InitializeComponent();
         }
 
+        private void UpdateHeader()
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            this.Text = $"{Text} - {version}";
+        }
+
         private void ManagementToolsOnNotify(object sender, NotificationEventArgs e)
         {
             foreach (IManagementTool managementTool in ManagementTools)
@@ -93,6 +100,7 @@ namespace TransistorBatchProcessor
                     TabCtrl.AddTab(managementTool as Control, managementTool.DisplayName);
                 }
                 Controls.Add(TabCtrl);
+                UpdateHeader();
             }
             finally
             {
