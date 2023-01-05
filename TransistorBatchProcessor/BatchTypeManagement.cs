@@ -51,6 +51,60 @@ namespace TransistorBatchProcessor
                     { new Tuple<string, int, ColumnHeaderType>(nameof(BatchType.Name), 140, ColumnHeaderType.text) },
                     { new Tuple<string, int, ColumnHeaderType>(nameof(BatchType.Description), 140, ColumnHeaderType.text) }
                 });
+            commandAndControl1.OnCommand += CommandAndControl1_OnCommand;
+        }
+
+        private void CommandAndControl1_OnCommand(object sender, CommandArgs e)
+        {
+            bool _ = e.Command switch
+            {
+                Command.Add => HandleAdd(),
+                Command.Update => HandleUpdate(),
+                Command.Remove => HandleRemove(),
+                _ => throw new InvalidOperationException($"Command Type [{e.Command}] has no handler.")
+            };
+        }
+
+        private bool HandleAdd()
+        {
+            if (batchTypeCtrl1.Validate(out string message))
+            {
+                BatchType batchType = batchTypeCtrl1.EntityInfo.Entity;
+                _batchTypeRepository.Insert(batchType).GetAwaiter().GetResult();
+                listView1.AddItemToView<BatchType>(batchType, null, true);
+            }
+            else
+            {
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
+            }
+            return true;
+        }
+
+        private bool HandleUpdate()
+        {
+            if (batchTypeCtrl1.Validate(out string message))
+            {
+                BatchType batchType = batchTypeCtrl1.EntityInfo.Entity;
+                _batchTypeRepository.Update(batchType).GetAwaiter().GetResult();
+                listView1.SetItemAfterUpdate<BatchType>(batchType);
+            }
+            else
+            {
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
+            }
+            return true;
+        }
+
+        private bool HandleRemove()
+        {
+            BatchType batchType = listView1.GetItemForUpdate<BatchType>().Entity;
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to remove batch type {batchType.Name}", "Delete", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                _batchTypeRepository.Delete(batchType).GetAwaiter().GetResult();
+                listView1.DeleteSelected();
+            }
+            return true;
         }
 
         private void ListViewSelectedIndexChanged(object sender, EventArgs e)
@@ -58,14 +112,12 @@ namespace TransistorBatchProcessor
             if (listView1.HasSelectedItem())
             {
                 batchTypeCtrl1.EntityInfo = listView1.GetItemForUpdate<BatchType>();
-                buttonAddOrUpdate.Text = "Update";
-                buttonRemove.Enabled = true;
+                commandAndControl1.ToggleCommands(Command.Update | Command.Remove);
             }
             else
             {
                 batchTypeCtrl1.EntityInfo = listView1.GetItemForAdd<BatchType>();
-                buttonAddOrUpdate.Text = "Add";
-                buttonRemove.Enabled = false;
+                commandAndControl1.ToggleCommands(Command.Add);
             }
         }
 
@@ -74,38 +126,6 @@ namespace TransistorBatchProcessor
             listView1.LoadItems<BatchType>(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
             listView1.ResetSortOrder();
             ListViewSelectedIndexChanged(null, null);
-        }
-
-        private void Remove_Click(object sender, EventArgs e)
-        {
-            BatchType batchType = listView1.GetItemForUpdate<BatchType>().Entity;
-            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to remove batch type {batchType.Name}", "Delete", MessageBoxButtons.OKCancel);
-            if(dialogResult == DialogResult.OK)
-            {
-                _batchTypeRepository.Delete(batchType).GetAwaiter().GetResult();
-            }
-        }
-
-        private void AddOrUpdate_Click(object sender, EventArgs e)
-        {
-            if (batchTypeCtrl1.Validate(out string message))
-            {
-                BatchType batchType = batchTypeCtrl1.EntityInfo.Entity;
-                if (batchTypeCtrl1.EntityInfo.State == EditState.New)
-                {
-                    _batchTypeRepository.Insert(batchType).GetAwaiter().GetResult();
-                    listView1.AddItemToView<BatchType>(batchType, null, true);
-                }
-                else
-                {
-                    _batchTypeRepository.Update(batchType).GetAwaiter().GetResult();
-                    listView1.SetItemAfterUpdate<BatchType>(batchType);
-                }
-            }
-            else
-            {
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK);
-            }
         }
 
         public void HandleEvent(NotificationEventArgs args)

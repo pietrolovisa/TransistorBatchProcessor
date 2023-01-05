@@ -28,31 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonRemove = new System.Windows.Forms.Button();
-            this.buttonAddOrUpdate = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.batchTypeCtrl1 = new TransistorBatchProcessor.BatchTypeCtrl();
+            this.commandAndControl1 = new TransistorBatchProcessor.CommandAndControl();
             this.SuspendLayout();
-            // 
-            // buttonRemove
-            // 
-            this.buttonRemove.Location = new System.Drawing.Point(730, 133);
-            this.buttonRemove.Name = "buttonRemove";
-            this.buttonRemove.Size = new System.Drawing.Size(94, 29);
-            this.buttonRemove.TabIndex = 8;
-            this.buttonRemove.Text = "Remove";
-            this.buttonRemove.UseVisualStyleBackColor = true;
-            this.buttonRemove.Click += new System.EventHandler(this.Remove_Click);
-            // 
-            // buttonAddOrUpdate
-            // 
-            this.buttonAddOrUpdate.Location = new System.Drawing.Point(621, 133);
-            this.buttonAddOrUpdate.Name = "buttonAddOrUpdate";
-            this.buttonAddOrUpdate.Size = new System.Drawing.Size(94, 29);
-            this.buttonAddOrUpdate.TabIndex = 7;
-            this.buttonAddOrUpdate.Text = "Add";
-            this.buttonAddOrUpdate.UseVisualStyleBackColor = true;
-            this.buttonAddOrUpdate.Click += new System.EventHandler(this.AddOrUpdate_Click);
             // 
             // listView1
             // 
@@ -71,13 +50,19 @@
             this.batchTypeCtrl1.Size = new System.Drawing.Size(286, 112);
             this.batchTypeCtrl1.TabIndex = 9;
             // 
+            // commandAndControl1
+            // 
+            this.commandAndControl1.Location = new System.Drawing.Point(651, 116);
+            this.commandAndControl1.Name = "commandAndControl1";
+            this.commandAndControl1.Size = new System.Drawing.Size(170, 188);
+            this.commandAndControl1.TabIndex = 10;
+            // 
             // BatchTypeManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.commandAndControl1);
             this.Controls.Add(this.batchTypeCtrl1);
-            this.Controls.Add(this.buttonRemove);
-            this.Controls.Add(this.buttonAddOrUpdate);
             this.Controls.Add(this.listView1);
             this.Name = "BatchTypeManagement";
             this.Size = new System.Drawing.Size(943, 436);
@@ -86,10 +71,8 @@
         }
 
         #endregion
-
-        private Button buttonRemove;
-        private Button buttonAddOrUpdate;
         private ListView listView1;
         private BatchTypeCtrl batchTypeCtrl1;
+        private CommandAndControl commandAndControl1;
     }
 }

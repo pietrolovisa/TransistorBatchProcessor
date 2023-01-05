@@ -45,7 +45,12 @@ namespace TransistorBatchProcessor
 
         public void InitializeControls()
         {
-            button.Text = Command.ToString();
+            ApplyOverride(Command.ToString());
+        }
+
+        public void ApplyOverride(string text)
+        {
+            button.Text = text;
         }
 
         private void ButtonClick(object sender, EventArgs e)

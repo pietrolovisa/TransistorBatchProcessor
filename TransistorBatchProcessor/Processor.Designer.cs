@@ -28,31 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonProcessBatch = new System.Windows.Forms.Button();
             this.comboBoxBatches = new System.Windows.Forms.ComboBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.numericUpDownHefTolerance = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownBetaTolerance = new System.Windows.Forms.NumericUpDown();
             this.labelBetaTolerance = new System.Windows.Forms.Label();
-            this.buttonRemoveMatches = new System.Windows.Forms.Button();
             this.listView2 = new System.Windows.Forms.ListView();
-            this.buttonReset = new System.Windows.Forms.Button();
             this.labelShowMatchDetails = new System.Windows.Forms.Label();
             this.labelListDetails = new System.Windows.Forms.Label();
+            this.commandAndControl1 = new TransistorBatchProcessor.CommandAndControl();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHefTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBetaTolerance)).BeginInit();
             this.SuspendLayout();
-            // 
-            // buttonProcessBatch
-            // 
-            this.buttonProcessBatch.Location = new System.Drawing.Point(575, 117);
-            this.buttonProcessBatch.Name = "buttonProcessBatch";
-            this.buttonProcessBatch.Size = new System.Drawing.Size(180, 29);
-            this.buttonProcessBatch.TabIndex = 6;
-            this.buttonProcessBatch.Text = "Show matches";
-            this.buttonProcessBatch.UseVisualStyleBackColor = true;
-            this.buttonProcessBatch.Click += new System.EventHandler(this.ButtonProcessBatch_Click);
             // 
             // comboBoxBatches
             // 
@@ -116,16 +104,6 @@
             this.labelBetaTolerance.TabIndex = 12;
             this.labelBetaTolerance.Text = "Beta Tolerance";
             // 
-            // buttonRemoveMatches
-            // 
-            this.buttonRemoveMatches.Location = new System.Drawing.Point(575, 166);
-            this.buttonRemoveMatches.Name = "buttonRemoveMatches";
-            this.buttonRemoveMatches.Size = new System.Drawing.Size(180, 29);
-            this.buttonRemoveMatches.TabIndex = 16;
-            this.buttonRemoveMatches.Text = "Remove matches";
-            this.buttonRemoveMatches.UseVisualStyleBackColor = true;
-            this.buttonRemoveMatches.Click += new System.EventHandler(this.ButtonRemoveMatches_Click);
-            // 
             // listView2
             // 
             this.listView2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -135,16 +113,6 @@
             this.listView2.Size = new System.Drawing.Size(542, 454);
             this.listView2.TabIndex = 17;
             this.listView2.UseCompatibleStateImageBehavior = false;
-            // 
-            // buttonReset
-            // 
-            this.buttonReset.Location = new System.Drawing.Point(575, 215);
-            this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(180, 29);
-            this.buttonReset.TabIndex = 18;
-            this.buttonReset.Text = "Reset";
-            this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
             // labelShowMatchDetails
             // 
@@ -163,22 +131,27 @@
             this.labelListDetails.TabIndex = 20;
             this.labelListDetails.Text = "label1";
             // 
+            // commandAndControl1
+            // 
+            this.commandAndControl1.Location = new System.Drawing.Point(571, 101);
+            this.commandAndControl1.Name = "commandAndControl1";
+            this.commandAndControl1.Size = new System.Drawing.Size(188, 141);
+            this.commandAndControl1.TabIndex = 21;
+            // 
             // Processor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.commandAndControl1);
             this.Controls.Add(this.labelListDetails);
             this.Controls.Add(this.labelShowMatchDetails);
-            this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.listView2);
-            this.Controls.Add(this.buttonRemoveMatches);
             this.Controls.Add(this.numericUpDownHefTolerance);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDownBetaTolerance);
             this.Controls.Add(this.labelBetaTolerance);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.comboBoxBatches);
-            this.Controls.Add(this.buttonProcessBatch);
             this.Name = "Processor";
             this.Size = new System.Drawing.Size(1343, 577);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHefTolerance)).EndInit();
@@ -189,18 +162,15 @@
         }
 
         #endregion
-
-        private Button buttonProcessBatch;
         private ComboBox comboBoxBatches;
         private ListView listView1;
         private NumericUpDown numericUpDownHefTolerance;
         private Label label1;
         private NumericUpDown numericUpDownBetaTolerance;
         private Label labelBetaTolerance;
-        private Button buttonRemoveMatches;
         private ListView listView2;
-        private Button buttonReset;
         private Label labelShowMatchDetails;
         private Label labelListDetails;
+        private CommandAndControl commandAndControl1;
     }
 }

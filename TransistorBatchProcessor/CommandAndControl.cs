@@ -49,6 +49,11 @@ namespace TransistorBatchProcessor
 
         public event EventHandler<CommandArgs> OnCommand;
 
+        public Dictionary<Command, string> Overrides = new Dictionary<Command, string>
+        {
+            {Command.RestoreAll, "Restore All" }
+        };
+
         public CommandAndControl()
         {
             InitializeComponent();
@@ -72,6 +77,11 @@ namespace TransistorBatchProcessor
             }
         }
 
+        public void ApplyOverride(Command command, string text)
+        {
+            Overrides[command] = text;
+        }
+
         private void Command_OnCommand(object sender, CommandArgs e)
         {
             OnCommand?.Invoke(sender, e);
@@ -82,6 +92,10 @@ namespace TransistorBatchProcessor
             foreach (CommandButton command in ButtonContainer.Controls.OfType<CommandButton>())
             {
                 bool enabled = commands.HasFlag(command.Command);
+                if(enabled && Overrides.ContainsKey(command.Command))
+                {
+                    command.ApplyOverride(Overrides[command.Command]);
+                }
                 command.Visible = enabled;
             }
         }

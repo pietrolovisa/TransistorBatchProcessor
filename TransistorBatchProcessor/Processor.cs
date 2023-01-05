@@ -103,38 +103,42 @@ namespace TransistorBatchProcessor
 
         public void InitializeView()
         {
+            commandAndControl1.ApplyOverride(Command.Remove, "Remove matches");
+            commandAndControl1.ApplyOverride(Command.Restore, "Reset");
+            commandAndControl1.ApplyOverride(Command.Add, "Show matches");
+            commandAndControl1.OnCommand += CommandAndControl1_OnCommand;
             ResetBatches();
         }
 
-        private void ResetMatches(TransistorGroupDiscovery activeDiscovery = null)
+        private void CommandAndControl1_OnCommand(object sender, CommandArgs e)
         {
-            ActiveDiscovery = activeDiscovery;
-            buttonRemoveMatches.Enabled = ActiveDiscovery != null && ActiveDiscovery.Matches.Count > 0;
+            bool _ = e.Command switch
+            {
+                Command.Remove => HandleRemove(),
+                Command.Restore => HandleRestore(),
+                Command.Add => HandleProcess(),
+                _ => throw new InvalidOperationException($"Command Type [{e.Command}] has no handler.")
+            };
         }
 
-        private void ResetBatches()
+        private bool HandleRemove()
         {
-            List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
+            if (ActiveDiscovery != null)
             {
-                IncludeBatchType = true
-            }).GetAwaiter().GetResult();
-            comboBoxBatches.DataSource = batches;
-            if (ActiveBatch != null)
-            {
-                comboBoxBatches.SelectedValue = ActiveBatch.Id;
+                _transistorRepository.UpdateGroups(ActiveDiscovery.Matches).GetAwaiter().GetResult();
+                _transistorRepository.ClearTracker();
+                ResetView();
             }
+            return true;
         }
 
-        private void LoadTransistors()
+        private bool HandleRestore()
         {
-            listView1.ClearAll();
-            List<Transistor> transistors = _transistorRepository.FindByBatchIdAndUnmatched(ActiveBatch.Id).GetAwaiter().GetResult();
-            listView1.LoadItems<Transistor>(transistors);
-            listView1.ResetSortOrder();
-            labelListDetails.Text = $"{transistors.Count} transistor(s)";
+            ResetView();
+            return true;
         }
 
-        private void ButtonProcessBatch_Click(object sender, EventArgs e)
+        private bool HandleProcess()
         {
             IBatchProcessor batchProcessor = new BatchProcessor();
             TransistorGroupLoadArgs args = new TransistorGroupLoadArgs
@@ -177,21 +181,40 @@ namespace TransistorBatchProcessor
             {
                 MessageBox.Show(result.Message, "Error", MessageBoxButtons.OK);
             }
+            return true;
         }
 
-        private void ButtonRemoveMatches_Click(object sender, EventArgs e)
+        private void ResetMatches(TransistorGroupDiscovery activeDiscovery = null)
         {
-            if (ActiveDiscovery != null)
+            ActiveDiscovery = activeDiscovery;
+            Command commands = Command.Restore | Command.Add;
+            if (ActiveDiscovery != null && ActiveDiscovery.Matches.Count > 0)
             {
-                _transistorRepository.UpdateGroups(ActiveDiscovery.Matches).GetAwaiter().GetResult();
-                _transistorRepository.ClearTracker();
-                ResetView();
+                commands |= Command.Remove;
+            }
+            commandAndControl1.ToggleCommands(commands);
+        }
+
+        private void ResetBatches()
+        {
+            List<Batch> batches = _batchRepository.FindAll(new BatchQueryFilter
+            {
+                IncludeBatchType = true
+            }).GetAwaiter().GetResult();
+            comboBoxBatches.DataSource = batches;
+            if (ActiveBatch != null)
+            {
+                comboBoxBatches.SelectedValue = ActiveBatch.Id;
             }
         }
 
-        private void buttonReset_Click(object sender, EventArgs e)
+        private void LoadTransistors()
         {
-            ResetView();
+            listView1.ClearAll();
+            List<Transistor> transistors = _transistorRepository.FindByBatchIdAndUnmatched(ActiveBatch.Id).GetAwaiter().GetResult();
+            listView1.LoadItems<Transistor>(transistors);
+            listView1.ResetSortOrder();
+            labelListDetails.Text = $"{transistors.Count} transistor(s)";
         }
 
         private void ResetView()

@@ -16,13 +16,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TransistorBatchProcessor
 {
-    public enum AddUpdateRestore
-    {
-        Add,
-        Update,
-        Restore
-    }
-
     public partial class TransistorManagement : UserControl, IManagementTool
     {
         public string DisplayName => "Transistor Management";
@@ -73,7 +66,9 @@ namespace TransistorBatchProcessor
             ResetBatches();
             ResetState();
             ReloadTransistors();
+            commandAndControl1.ApplyOverride(Command.Process, "Find matches ...");
             commandAndControl1.OnCommand += CommandAndControl1_OnCommand;
+            ListViewSelectedIndexChanged(null, null);
         }
 
         private void CommandAndControl1_OnCommand(object sender, CommandArgs e)
@@ -190,7 +185,7 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = listView1.GetItemForUpdate<Transistor>();
-                    commandAndControl1.ToggleCommands(Command.Restore | Command.RestoreAll | Command.Remove | Command.Process);
+                    commandAndControl1.ToggleCommands(Command.Restore | Command.RestoreAll | Command.Remove);
                 }
                 else
                 {
@@ -205,7 +200,7 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = null;
-                    commandAndControl1.ToggleCommands(Command.RestoreAll | Command.Process);
+                    commandAndControl1.ToggleCommands(Command.RestoreAll);
                 }
                 else
                 {
@@ -309,14 +304,7 @@ namespace TransistorBatchProcessor
             }
             listView1.ResetSortOrder();
             labelListDetails.Text = $"{transistors.Count} transistor(s)";
-            if (listView1.Items.Count > 0)
-            {
-                listView1.Items[0].ForceSelected();
-            }
-            else
-            {
-                ListViewSelectedIndexChanged(null, null);
-            }
+            ListViewSelectedIndexChanged(null, null);
         }
 
         public void HandleEvent(NotificationEventArgs args)
