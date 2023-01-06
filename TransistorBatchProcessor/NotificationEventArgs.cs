@@ -11,7 +11,8 @@ namespace TransistorBatchProcessor
     {
         Empty,
         BatchAdded,
-        BatchRemoved
+        BatchRemoved,
+        BatchTypeItemChanged
     }
 
     delegate void RaiseNotifyDelegate(NotificationEventArgs args);
@@ -20,6 +21,7 @@ namespace TransistorBatchProcessor
     {
         public static NotificationEventArgs BatchAdded => new NotificationEventArgs() { Event = EventType.BatchAdded };
         public static NotificationEventArgs BatchRemoved => new NotificationEventArgs() { Event = EventType.BatchRemoved };
+        public static NotificationEventArgs BatchTypeItemChanged => new NotificationEventArgs() { Event = EventType.BatchTypeItemChanged };
 
         public EventType Event { get; set; } = EventType.Empty;
         public object Entity { get; set; }

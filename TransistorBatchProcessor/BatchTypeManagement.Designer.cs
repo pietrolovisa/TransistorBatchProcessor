@@ -39,22 +39,24 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listView1.Location = new System.Drawing.Point(15, 15);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(504, 402);
+            this.listView1.Size = new System.Drawing.Size(525, 443);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // batchTypeCtrl1
             // 
-            this.batchTypeCtrl1.Location = new System.Drawing.Point(545, 15);
+            this.batchTypeCtrl1.Location = new System.Drawing.Point(558, 19);
             this.batchTypeCtrl1.Name = "batchTypeCtrl1";
-            this.batchTypeCtrl1.Size = new System.Drawing.Size(286, 112);
+            this.batchTypeCtrl1.Size = new System.Drawing.Size(268, 112);
             this.batchTypeCtrl1.TabIndex = 9;
             // 
             // commandAndControl1
             // 
-            this.commandAndControl1.Location = new System.Drawing.Point(651, 116);
+            this.commandAndControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.commandAndControl1.Location = new System.Drawing.Point(661, 122);
             this.commandAndControl1.Name = "commandAndControl1";
-            this.commandAndControl1.Size = new System.Drawing.Size(170, 188);
+            this.commandAndControl1.Size = new System.Drawing.Size(165, 340);
             this.commandAndControl1.TabIndex = 10;
             // 
             // BatchTypeManagement
@@ -65,7 +67,7 @@
             this.Controls.Add(this.batchTypeCtrl1);
             this.Controls.Add(this.listView1);
             this.Name = "BatchTypeManagement";
-            this.Size = new System.Drawing.Size(943, 436);
+            this.Size = new System.Drawing.Size(943, 476);
             this.ResumeLayout(false);
 
         }

@@ -71,7 +71,7 @@ namespace TransistorBatchProcessor
             Controls.Add(ButtonContainer);
             foreach (CommandButton command in ButtonContainer.Controls.OfType<CommandButton>())
             {
-                command.Height = 42;
+                command.Height = 36;
                 command.InitializeControls();
                 command.OnCommand += Command_OnCommand;
             }

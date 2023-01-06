@@ -1,6 +1,6 @@
 ﻿namespace TransistorBatchProcessor
 {
-    partial class CommandButton
+    partial class TextEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,35 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button = new System.Windows.Forms.Button();
+            this.textBox = new System.Windows.Forms.TextBox();
+            this.label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button
+            // textBox
             // 
-            this.button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button.Location = new System.Drawing.Point(0, 5);
-            this.button.Name = "button";
-            this.button.Size = new System.Drawing.Size(200, 34);
-            this.button.TabIndex = 0;
-            this.button.Text = "button1";
-            this.button.UseVisualStyleBackColor = true;
-            this.button.Click += new System.EventHandler(this.ButtonClick);
+            this.textBox.Location = new System.Drawing.Point(104, 3);
+            this.textBox.Name = "textBox";
+            this.textBox.Size = new System.Drawing.Size(261, 27);
+            this.textBox.TabIndex = 0;
             // 
-            // CommandButton
+            // label
+            // 
+            this.label.Location = new System.Drawing.Point(3, 6);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(101, 20);
+            this.label.TabIndex = 1;
+            this.label.Text = "label1";
+            // 
+            // TextEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button);
-            this.Name = "CommandButton";
-            this.Size = new System.Drawing.Size(200, 42);
+            this.Controls.Add(this.textBox);
+            this.Controls.Add(this.label);
+            this.Name = "TextEditor";
+            this.Size = new System.Drawing.Size(368, 34);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private Button button;
+        private TextBox textBox;
+        private Label label;
     }
 }

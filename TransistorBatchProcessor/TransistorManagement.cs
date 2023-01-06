@@ -62,7 +62,7 @@ namespace TransistorBatchProcessor
 
         public void InitializeView()
         {
-            labelListDetails.Text = string.Empty;
+            //labelListDetails.Text = string.Empty;
             ResetBatches();
             ResetState();
             ReloadTransistors();
@@ -94,6 +94,7 @@ namespace TransistorBatchProcessor
                 _transistorRepository.Insert(transistor).GetAwaiter().GetResult();
                 _transistorRepository.ClearTracker();
                 listView1.AddItemToView<Transistor>(transistor, null, true);
+                UpdateDetails();
             }
             else
             {
@@ -127,6 +128,7 @@ namespace TransistorBatchProcessor
                 _transistorRepository.Delete(transistor).GetAwaiter().GetResult();
                 _transistorRepository.ClearTracker();
                 listView1.DeleteSelected();
+                UpdateDetails();
             }
             return true;
         }
@@ -143,6 +145,7 @@ namespace TransistorBatchProcessor
                 _transistorRepository.Update(transistor).GetAwaiter().GetResult();
                 _transistorRepository.ClearTracker();
                 listView1.DeleteSelected();
+                UpdateDetails();
             }
             return true;
         }
@@ -162,6 +165,7 @@ namespace TransistorBatchProcessor
                 }
                 _transistorRepository.ClearTracker();
                 listView1.ClearAll();
+                UpdateDetails();
             }
             return true;
         }
@@ -303,7 +307,7 @@ namespace TransistorBatchProcessor
                 }
             }
             listView1.ResetSortOrder();
-            labelListDetails.Text = $"{transistors.Count} transistor(s)";
+            UpdateDetails();
             ListViewSelectedIndexChanged(null, null);
         }
 
@@ -313,6 +317,11 @@ namespace TransistorBatchProcessor
             {
                 ResetBatches();
             }
+        }
+
+        public void UpdateDetails()
+        {
+            transistorCtrl1.Text = $"{listView1.Items.Count} transistor(s)";
         }
     }
 }

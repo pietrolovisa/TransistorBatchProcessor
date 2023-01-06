@@ -93,14 +93,5 @@ namespace TransistorBatchProcessor
                 return true;
             }
         }
-
-        public void LoadTypes(List<BatchType> batchTypes)
-        {
-            comboBoxType.Items.Clear();
-            foreach (BatchType batchType in batchTypes)
-            {
-                comboBoxType.Items.Add(batchType);
-            }
-        }
     }
 }

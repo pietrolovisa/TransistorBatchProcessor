@@ -71,7 +71,10 @@ namespace TransistorBatchProcessor
             {
                 BatchType batchType = batchTypeCtrl1.EntityInfo.Entity;
                 _batchTypeRepository.Insert(batchType).GetAwaiter().GetResult();
+                _batchTypeRepository.ClearTracker();
                 listView1.AddItemToView<BatchType>(batchType, null, true);
+                UpdateDetails();
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged);
             }
             else
             {
@@ -86,7 +89,9 @@ namespace TransistorBatchProcessor
             {
                 BatchType batchType = batchTypeCtrl1.EntityInfo.Entity;
                 _batchTypeRepository.Update(batchType).GetAwaiter().GetResult();
+                _batchTypeRepository.ClearTracker();
                 listView1.SetItemAfterUpdate<BatchType>(batchType);
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged);
             }
             else
             {
@@ -102,7 +107,10 @@ namespace TransistorBatchProcessor
             if (dialogResult == DialogResult.OK)
             {
                 _batchTypeRepository.Delete(batchType).GetAwaiter().GetResult();
+                _batchTypeRepository.ClearTracker();
                 listView1.DeleteSelected();
+                UpdateDetails();
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged);
             }
             return true;
         }
@@ -126,11 +134,17 @@ namespace TransistorBatchProcessor
             listView1.LoadItems<BatchType>(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
             listView1.ResetSortOrder();
             ListViewSelectedIndexChanged(null, null);
+            UpdateDetails();
         }
 
         public void HandleEvent(NotificationEventArgs args)
         {
 
+        }
+
+        public void UpdateDetails()
+        {
+            batchTypeCtrl1.Text = $"{listView1.Items.Count} batch type(s)";
         }
     }
 }

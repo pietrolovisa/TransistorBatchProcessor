@@ -32,15 +32,14 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.comboBoxBatches = new System.Windows.Forms.ComboBox();
             this.comboBoxState = new System.Windows.Forms.ComboBox();
-            this.labelListDetails = new System.Windows.Forms.Label();
             this.commandAndControl1 = new TransistorBatchProcessor.CommandAndControl();
             this.SuspendLayout();
             // 
             // transistorCtrl1
             // 
-            this.transistorCtrl1.Location = new System.Drawing.Point(561, 66);
+            this.transistorCtrl1.Location = new System.Drawing.Point(558, 66);
             this.transistorCtrl1.Name = "transistorCtrl1";
-            this.transistorCtrl1.Size = new System.Drawing.Size(265, 148);
+            this.transistorCtrl1.Size = new System.Drawing.Size(268, 148);
             this.transistorCtrl1.TabIndex = 9;
             // 
             // listView1
@@ -70,20 +69,13 @@
             this.comboBoxState.Size = new System.Drawing.Size(245, 28);
             this.comboBoxState.TabIndex = 12;
             // 
-            // labelListDetails
-            // 
-            this.labelListDetails.AutoSize = true;
-            this.labelListDetails.Location = new System.Drawing.Point(561, 20);
-            this.labelListDetails.Name = "labelListDetails";
-            this.labelListDetails.Size = new System.Drawing.Size(50, 20);
-            this.labelListDetails.TabIndex = 13;
-            this.labelListDetails.Text = "label1";
-            // 
             // commandAndControl1
             // 
-            this.commandAndControl1.Location = new System.Drawing.Point(649, 213);
+            this.commandAndControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.commandAndControl1.Location = new System.Drawing.Point(661, 203);
             this.commandAndControl1.Name = "commandAndControl1";
-            this.commandAndControl1.Size = new System.Drawing.Size(165, 356);
+            this.commandAndControl1.Size = new System.Drawing.Size(165, 254);
             this.commandAndControl1.TabIndex = 15;
             // 
             // TransistorManagement
@@ -91,7 +83,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.commandAndControl1);
-            this.Controls.Add(this.labelListDetails);
             this.Controls.Add(this.comboBoxState);
             this.Controls.Add(this.transistorCtrl1);
             this.Controls.Add(this.listView1);
@@ -99,7 +90,6 @@
             this.Name = "TransistorManagement";
             this.Size = new System.Drawing.Size(943, 476);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -108,7 +98,6 @@
         private ListView listView1;
         private ComboBox comboBoxBatches;
         private ComboBox comboBoxState;
-        private Label labelListDetails;
         private CommandAndControl commandAndControl1;
     }
 }

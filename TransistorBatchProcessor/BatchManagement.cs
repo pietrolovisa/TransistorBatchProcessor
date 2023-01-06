@@ -140,13 +140,15 @@ namespace TransistorBatchProcessor
                 IncludeBatchType = true
             }).GetAwaiter().GetResult());
             listView1.ResetSortOrder();
-            batchCtrl1.LoadTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
             ListViewSelectedIndexChanged(null, null);
         }
 
         public void HandleEvent(NotificationEventArgs args)
         {
-
+            if (args.Event == EventType.BatchTypeItemChanged)
+            {
+                batchCtrl1.ResetBatchTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
+            }
         }
     }
 }
