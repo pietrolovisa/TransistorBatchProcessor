@@ -62,7 +62,6 @@ namespace TransistorBatchProcessor
 
         public void InitializeView()
         {
-            //labelListDetails.Text = string.Empty;
             ResetBatches();
             ResetState();
             ReloadTransistors();

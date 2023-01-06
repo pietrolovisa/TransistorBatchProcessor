@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web;
 using TransisterBatch.EntityFramework.Domain;
 
 namespace TransistorBatchProcessor.Extensions
@@ -51,6 +52,42 @@ namespace TransistorBatchProcessor.Extensions
                     Tag = column.Item3
                 });
             }
+
+            listView.OwnerDraw = true;
+            listView.DrawColumnHeader +=
+                new DrawListViewColumnHeaderEventHandler
+                (
+                    (sender, e) => headerDraw(sender as ListView, e, listView.BackColor, listView.ForeColor)
+                );
+            listView.DrawItem += new DrawListViewItemEventHandler(bodyDraw);
+        }
+
+        private static void headerDraw(ListView listView, DrawListViewColumnHeaderEventArgs e, Color backColor, Color foreColor)
+        {
+            using (SolidBrush backBrush = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(backBrush, e.Bounds);
+            }
+
+            //ListViewColumnSorter columnSorter = listView.ListViewItemSorter as ListViewColumnSorter;
+            string symbol = string.Empty;
+            //if (columnSorter.SortColumn == e.Header.Index)
+            //{
+            //    symbol = columnSorter.Order switch
+            //    {
+            //        SortOrder.Ascending => "\u25B2",
+            //        SortOrder.Descending => "\u25BC",
+            //        _ => string.Empty
+            //    };
+            //}
+            using SolidBrush foreBrush = new SolidBrush(foreColor);
+            Font font = new Font(e.Font, FontStyle.Bold);
+            e.Graphics.DrawString($"{e.Header.Text} {symbol}", font, foreBrush, e.Bounds); //\u25BC \u25B2
+        }
+
+        private static void bodyDraw(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
         }
 
         public static void ClearAll(this ListView listView)
