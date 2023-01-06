@@ -96,10 +96,10 @@ namespace TransistorBatchProcessor
             ControlContainer.Controls.Add(IdxTextEditor);
             ControlContainer.Controls.Add(Details);
             Controls.Add(ControlContainer);
-            foreach (TextEditor command in ControlContainer.Controls.OfType<TextEditor>())
+            foreach (IEditorControl control in ControlContainer.Controls.OfType<IEditorControl>())
             {
-                command.Height = 34;
-                command.InitializeControls();
+                control.Height = 34;
+                control.InitializeControls();
             }
         }
 

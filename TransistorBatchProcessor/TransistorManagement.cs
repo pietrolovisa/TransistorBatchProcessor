@@ -166,6 +166,7 @@ namespace TransistorBatchProcessor
                 }
                 _transistorRepository.ClearTracker();
                 listView1.ClearAll();
+                ListViewSelectedIndexChanged(null, null);
                 UpdateDetails();
             }
             return true;
@@ -205,7 +206,12 @@ namespace TransistorBatchProcessor
                 {
                     transistorCtrl1.Toggle(false);
                     transistorCtrl1.EntityInfo = null;
-                    commandAndControl1.ToggleCommands(Command.RestoreAll);
+                    Command commands = Command.None;
+                    if (listView1.Items.Count > 0)
+                    {
+                        commands |= Command.RestoreAll;
+                    }
+                    commandAndControl1.ToggleCommands(commands);
                 }
                 else
                 {
@@ -223,7 +229,12 @@ namespace TransistorBatchProcessor
                             Idx = next
                         }
                     };
-                    commandAndControl1.ToggleCommands(Command.Add | Command.Process);
+                    Command commands = Command.Add;
+                    if (listView1.Items.Count > 0)
+                    {
+                        commands |= Command.Process;
+                    }
+                    commandAndControl1.ToggleCommands(commands);
                 }
             }
         }

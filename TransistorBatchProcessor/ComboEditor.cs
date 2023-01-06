@@ -12,7 +12,7 @@ using TransistorBatchProcessor.Extensions;
 
 namespace TransistorBatchProcessor
 {
-    public partial class ComboEditor : UserControl
+    public partial class ComboEditor : UserControl, IEditorControl
     {
         public string Caption { get; set; }
         public bool IsReadonly { get; set; } = false;

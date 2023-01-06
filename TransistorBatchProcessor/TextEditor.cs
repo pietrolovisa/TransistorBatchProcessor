@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace TransistorBatchProcessor
 {
-    public partial class TextEditor : UserControl
+    public partial class TextEditor : UserControl, IEditorControl
     {
         public string Caption { get; set; }
         public bool IsReadonly { get; set; } = false;
