@@ -156,6 +156,7 @@ namespace TransistorBatchProcessor
                 "Restore All", MessageBoxButtons.OKCancel);
             if (dialogResult == DialogResult.OK)
             {
+                listView1.SelectedItems.Clear();
                 foreach (ListViewItem item in listView1.Items)
                 {
                     Transistor transistor = (Transistor)item?.Tag;

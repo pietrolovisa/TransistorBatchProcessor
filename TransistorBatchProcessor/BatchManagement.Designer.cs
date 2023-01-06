@@ -39,7 +39,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listView1.Location = new System.Drawing.Point(15, 15);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(504, 402);
+            this.listView1.Size = new System.Drawing.Size(525, 443);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -47,14 +47,16 @@
             // 
             this.batchCtrl1.Location = new System.Drawing.Point(558, 19);
             this.batchCtrl1.Name = "batchCtrl1";
-            this.batchCtrl1.Size = new System.Drawing.Size(308, 93);
+            this.batchCtrl1.Size = new System.Drawing.Size(268, 112);
             this.batchCtrl1.TabIndex = 7;
             // 
             // commandAndControl1
             // 
-            this.commandAndControl1.Location = new System.Drawing.Point(653, 111);
+            this.commandAndControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.commandAndControl1.Location = new System.Drawing.Point(661, 122);
             this.commandAndControl1.Name = "commandAndControl1";
-            this.commandAndControl1.Size = new System.Drawing.Size(196, 188);
+            this.commandAndControl1.Size = new System.Drawing.Size(165, 340);
             this.commandAndControl1.TabIndex = 11;
             // 
             // BatchManagement
@@ -65,7 +67,7 @@
             this.Controls.Add(this.batchCtrl1);
             this.Controls.Add(this.listView1);
             this.Name = "BatchManagement";
-            this.Size = new System.Drawing.Size(943, 436);
+            this.Size = new System.Drawing.Size(943, 476);
             this.ResumeLayout(false);
 
         }

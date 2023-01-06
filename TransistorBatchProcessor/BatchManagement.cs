@@ -75,8 +75,10 @@ namespace TransistorBatchProcessor
                 {
                     IncludeBatchType = true
                 }).GetAwaiter().GetResult();
+                _batchRepository.ClearTracker();
                 listView1.AddItemToView<Batch>(batch, null, true);
                 OnNotify?.Invoke(this, NotificationEventArgs.BatchAdded);
+                UpdateDetails();
             }
             else
             {
@@ -90,12 +92,12 @@ namespace TransistorBatchProcessor
             if (batchCtrl1.Validate(out string message))
             {
                 Batch batch = batchCtrl1.EntityInfo.Entity;
-
                 _batchRepository.Update(batch).GetAwaiter().GetResult();
                 batch = _batchRepository.FindByKey(batch.Id, new BatchQueryFilter
                 {
                     IncludeBatchType = true
                 }).GetAwaiter().GetResult();
+                _batchRepository.ClearTracker();
                 listView1.SetItemAfterUpdate<Batch>(batch);
             }
             else
@@ -112,8 +114,10 @@ namespace TransistorBatchProcessor
             if (dialogResult == DialogResult.OK)
             {
                 _batchRepository.Delete(batch).GetAwaiter().GetResult();
+                _batchRepository.ClearTracker();
                 listView1.DeleteSelected();
                 OnNotify?.Invoke(this, NotificationEventArgs.BatchRemoved);
+                UpdateDetails();
             }
             return true;
         }
@@ -141,6 +145,7 @@ namespace TransistorBatchProcessor
             }).GetAwaiter().GetResult());
             listView1.ResetSortOrder();
             ListViewSelectedIndexChanged(null, null);
+            UpdateDetails();
         }
 
         public void HandleEvent(NotificationEventArgs args)
@@ -149,6 +154,11 @@ namespace TransistorBatchProcessor
             {
                 batchCtrl1.ResetBatchTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
             }
+        }
+
+        public void UpdateDetails()
+        {
+            batchCtrl1.Text = $"{listView1.Items.Count} batch(s)";
         }
     }
 }

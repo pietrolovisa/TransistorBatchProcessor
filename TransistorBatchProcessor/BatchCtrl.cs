@@ -17,8 +17,27 @@ namespace TransistorBatchProcessor
     {
         protected EntityWrapper<Batch> _entityInfo = default;
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected bool Editable { get; set; }
+        private Panel ControlContainer = new Panel
+        {
+            Dock = DockStyle.Fill,
+        };
+
+        private Label Details = new Label
+        {
+            Dock = DockStyle.Top,
+            AutoSize = false,
+            Height = 32
+        };
+        private TextEditor NameTextEditor = new TextEditor
+        {
+            Dock = DockStyle.Top,
+            Caption = "Name",
+        };
+        private ComboEditor TypeComboEditor = new ComboEditor
+        {
+            Dock = DockStyle.Top,
+            Caption = "Type"
+        };
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected bool SupressEvents { get; set; }
@@ -49,42 +68,62 @@ namespace TransistorBatchProcessor
         public BatchCtrl()
         {
             InitializeComponent();
-            comboBoxType.InitCombobox(ComboBoxType_SelectedIndexChanged);
+            LoadCommandAndControl();
         }
 
-        private void ComboBoxType_SelectedIndexChanged(object sender, EventArgs e)
+        public override string Text
         {
-           
+            get
+            {
+                return Details.Text;
+            }
+            set
+            {
+                Details.Text = value;
+            }
+        }
+
+        private void LoadCommandAndControl()
+        {
+            ControlContainer.Controls.Add(TypeComboEditor);
+            ControlContainer.Controls.Add(NameTextEditor);
+            ControlContainer.Controls.Add(Details);
+            Controls.Add(ControlContainer);
+            foreach (TextEditor command in ControlContainer.Controls.OfType<TextEditor>())
+            {
+                command.Height = 34;
+                command.InitializeControls();
+            }
         }
 
         protected void ResetEntityFromInput()
         {
-            _entityInfo.Entity.Name = textBoxName.Text;
-            BatchType batchType = comboBoxType.SelectedItem as BatchType;
+            _entityInfo.Entity.Name = NameTextEditor.Text;
+            BatchType batchType = TypeComboEditor.GetSelectedItem<BatchType>();
             _entityInfo.Entity.BatchTypeId = batchType.Id;
         }
 
         protected void PopulateInputFromEntity()
         {
-            textBoxName.Text = _entityInfo.Entity.Name;
-            comboBoxType.SelectedValue = _entityInfo.Entity.BatchTypeId;
+            NameTextEditor.Text = _entityInfo.Entity.Name;
+            TypeComboEditor.SetSelected(_entityInfo.Entity.BatchTypeId);
         }
 
         public void ResetBatchTypes(List<BatchType> batchTypes)
         {
-            comboBoxType.DataSource = batchTypes;
+            TypeComboEditor.ResetBatchTypes(batchTypes);
         }
 
         public bool Validate(out string message)
         {
-            if (comboBoxType.SelectedIndex == -1)
-            {
-                message = $"{nameof(Batch.Type)} is invalid.";
-                return false;
-            }
-            else if (string.IsNullOrWhiteSpace(textBoxName.Text))
+            if (string.IsNullOrWhiteSpace(NameTextEditor.Text))
             {
                 message = $"{nameof(Batch.Name)} is invalid.";
+                return false;
+            }
+            else if (TypeComboEditor.SelectedIndex == -1)
+            {
+                message = $"{nameof(Batch.Type)} is invalid.";
                 return false;
             }
             else
