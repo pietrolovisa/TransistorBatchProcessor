@@ -95,7 +95,7 @@ namespace TransistorBatchProcessor
 
         public void HandleEvent(NotificationEventArgs args)
         {
-            if (args.Event == EventType.BatchAdded || args.Event == EventType.BatchRemoved)
+            if (args.Event == EventType.BatchItemChanged)
             {
                 ResetBatches();
             }

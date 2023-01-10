@@ -74,7 +74,7 @@ namespace TransistorBatchProcessor
                 _batchTypeRepository.ClearTracker();
                 listView1.AddItemToView<BatchType>(batchType, null, true);
                 UpdateDetails();
-                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged);
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged(Command.Add));
             }
             else
             {
@@ -91,7 +91,7 @@ namespace TransistorBatchProcessor
                 _batchTypeRepository.Update(batchType).GetAwaiter().GetResult();
                 _batchTypeRepository.ClearTracker();
                 listView1.SetItemAfterUpdate<BatchType>(batchType);
-                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged);
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged(Command.Update));
             }
             else
             {
@@ -110,7 +110,7 @@ namespace TransistorBatchProcessor
                 _batchTypeRepository.ClearTracker();
                 listView1.DeleteSelected();
                 UpdateDetails();
-                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged);
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchTypeItemChanged(Command.Remove));
             }
             return true;
         }

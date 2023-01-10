@@ -214,26 +214,35 @@ namespace TransistorBatchProcessor
                 }
                 else
                 {
-                    transistorCtrl1.Toggle(true);
-                    long next = _transistorRepository.FindByBatchId(ActiveBatch.Id)
-                        .GetAwaiter()
-                        .GetResult()
-                        .DefaultIfEmpty(new Transistor { Id = 0 })
-                        .Max(t => t.Idx) + 1;
-                    transistorCtrl1.EntityInfo = new EntityWrapper<Transistor>
+                    if (ActiveBatch == null)
                     {
-                        State = EditState.New,
-                        Entity = new Transistor
-                        {
-                            Idx = next
-                        }
-                    };
-                    Command commands = Command.Add;
-                    if (listView1.Items.Count > 0)
-                    {
-                        commands |= Command.Process;
+                        transistorCtrl1.Toggle(false);
+                        transistorCtrl1.EntityInfo = null;
+                        commandAndControl1.ToggleCommands(Command.None);
                     }
-                    commandAndControl1.ToggleCommands(commands);
+                    else
+                    {
+                        transistorCtrl1.Toggle(true);
+                        long next = _transistorRepository.FindByBatchId(ActiveBatch.Id)
+                            .GetAwaiter()
+                            .GetResult()
+                            .DefaultIfEmpty(new Transistor { Id = 0 })
+                            .Max(t => t.Idx) + 1;
+                        transistorCtrl1.EntityInfo = new EntityWrapper<Transistor>
+                        {
+                            State = EditState.New,
+                            Entity = new Transistor
+                            {
+                                Idx = next
+                            }
+                        };
+                        Command commands = Command.Add;
+                        if (listView1.Items.Count > 0)
+                        {
+                            commands |= Command.Process;
+                        }
+                        commandAndControl1.ToggleCommands(commands);
+                    }
                 }
             }
         }
@@ -289,32 +298,39 @@ namespace TransistorBatchProcessor
             listView1.ClearAll();
 
             Batch selectedItem = comboBoxBatches.SelectedItem as Batch;
-            ActiveBatch = _batchRepository.FindByKey(selectedItem.Id, new BatchQueryFilter
-            {
-                IncludeBatchType = true
-            }).GetAwaiter().GetResult();
 
-            TransistorStateItem transistorStateItem = comboBoxState.SelectedItem as TransistorStateItem;
-            List<Transistor> transistors; 
-            if (transistorStateItem.State == TransistorState.Unmatched)
+            if (selectedItem != null)
             {
-                transistors = _transistorRepository.FindByBatchIdAndUnmatched(ActiveBatch.Id).GetAwaiter().GetResult();
-                listView1.LoadItems<Transistor>(transistors);
-            }
-            else
-            {
-                transistors = _transistorRepository.FindByBatchIdAndMatched(ActiveBatch.Id).GetAwaiter().GetResult();
-                List <TransistorGroup> batches = transistors.GroupBy(t => t.GroupId)
-                    .Select(grp => new TransistorGroup(grp.ToList()))
-                    .OrderByDescending(grp => grp.Count)
-                    .ToList();
-                int index = 1;
-                foreach (TransistorGroup group in batches)
+                ActiveBatch = _batchRepository.FindByKey(selectedItem.Id, new BatchQueryFilter
                 {
-                    ListViewGroup listViewGroup = new ListViewGroup($"Group {index} ({group.Count})", HorizontalAlignment.Left);
-                    listView1.Groups.Add(listViewGroup);
-                    group.ForEach(t => listView1.AddItemToView(t, listViewGroup));
-                    index++;
+                    IncludeBatchType = true
+                }).GetAwaiter().GetResult();
+
+                if (ActiveBatch != null)
+                {
+                    TransistorStateItem transistorStateItem = comboBoxState.SelectedItem as TransistorStateItem;
+                    List<Transistor> transistors;
+                    if (transistorStateItem.State == TransistorState.Unmatched)
+                    {
+                        transistors = _transistorRepository.FindByBatchIdAndUnmatched(ActiveBatch.Id).GetAwaiter().GetResult();
+                        listView1.LoadItems<Transistor>(transistors);
+                    }
+                    else
+                    {
+                        transistors = _transistorRepository.FindByBatchIdAndMatched(ActiveBatch.Id).GetAwaiter().GetResult();
+                        List<TransistorGroup> batches = transistors.GroupBy(t => t.GroupId)
+                            .Select(grp => new TransistorGroup(grp.ToList()))
+                            .OrderByDescending(grp => grp.Count)
+                            .ToList();
+                        int index = 1;
+                        foreach (TransistorGroup group in batches)
+                        {
+                            ListViewGroup listViewGroup = new ListViewGroup($"Group {index} ({group.Count})", HorizontalAlignment.Left);
+                            listView1.Groups.Add(listViewGroup);
+                            group.ForEach(t => listView1.AddItemToView(t, listViewGroup));
+                            index++;
+                        }
+                    }
                 }
             }
             listView1.ResetSortOrder();
@@ -324,9 +340,11 @@ namespace TransistorBatchProcessor
 
         public void HandleEvent(NotificationEventArgs args)
         {
-            if(args.Event == EventType.BatchAdded || args.Event == EventType.BatchRemoved)
+            if (args.Event == EventType.BatchItemChanged || args.Event == EventType.BatchTypeItemChanged)
             {
+                ActiveBatch = null;
                 ResetBatches();
+                ReloadTransistors();
             }
         }
 

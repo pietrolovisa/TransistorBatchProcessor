@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TransisterBatchCore;
-
+﻿
 namespace TransistorBatchProcessor
 {
     public enum EventType
     {
         Empty,
-        BatchAdded,
-        BatchRemoved,
+        BatchItemChanged,
         BatchTypeItemChanged
     }
 
@@ -19,11 +12,22 @@ namespace TransistorBatchProcessor
 
     public class NotificationEventArgs : EventArgs
     {
-        public static NotificationEventArgs BatchAdded => new NotificationEventArgs() { Event = EventType.BatchAdded };
-        public static NotificationEventArgs BatchRemoved => new NotificationEventArgs() { Event = EventType.BatchRemoved };
-        public static NotificationEventArgs BatchTypeItemChanged => new NotificationEventArgs() { Event = EventType.BatchTypeItemChanged };
+        public static NotificationEventArgs BatchItemChanged(Command command = Command.None, object entity = null) => new NotificationEventArgs
+        { 
+            Event = EventType.BatchItemChanged,
+            Command = command,
+            Entity = entity
+        };
+
+        public static NotificationEventArgs BatchTypeItemChanged(Command command = Command.None, object entity = null) => new NotificationEventArgs
+        { 
+            Event = EventType.BatchTypeItemChanged, 
+            Command = command,
+            Entity = entity
+        };
 
         public EventType Event { get; set; } = EventType.Empty;
+        public Command Command { get; set; } = Command.None;
         public object Entity { get; set; }
 
         public NotificationEventArgs()

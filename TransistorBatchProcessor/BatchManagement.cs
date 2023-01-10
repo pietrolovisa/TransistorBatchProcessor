@@ -77,7 +77,7 @@ namespace TransistorBatchProcessor
                 }).GetAwaiter().GetResult();
                 _batchRepository.ClearTracker();
                 listView1.AddItemToView<Batch>(batch, null, true);
-                OnNotify?.Invoke(this, NotificationEventArgs.BatchAdded);
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchItemChanged(Command.Add));
                 UpdateDetails();
             }
             else
@@ -116,8 +116,8 @@ namespace TransistorBatchProcessor
                 _batchRepository.Delete(batch).GetAwaiter().GetResult();
                 _batchRepository.ClearTracker();
                 listView1.DeleteSelected();
-                OnNotify?.Invoke(this, NotificationEventArgs.BatchRemoved);
                 UpdateDetails();
+                OnNotify?.Invoke(this, NotificationEventArgs.BatchItemChanged(Command.Remove));
             }
             return true;
         }
@@ -152,7 +152,18 @@ namespace TransistorBatchProcessor
         {
             if (args.Event == EventType.BatchTypeItemChanged)
             {
-                batchCtrl1.ResetBatchTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
+                if (args.Command == Command.Remove)
+                {
+                    InitializeView();
+                }
+                else
+                {
+                    batchCtrl1.ResetBatchTypes(_batchTypeRepository.FindAll().GetAwaiter().GetResult());
+                    if (listView1.HasSelectedItem())
+                    {
+                        batchCtrl1.EntityInfo = listView1.GetItemForUpdate<Batch>();
+                    }
+                }
             }
         }
 

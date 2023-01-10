@@ -27,7 +27,8 @@ namespace TransisterBatch.EntityFramework.Domain
 
                 table.HasOne(e => e.Type)
                     .WithMany(e => e.Batches)
-                    .HasForeignKey(e => new { e.BatchTypeId });
+                    .HasForeignKey(e => new { e.BatchTypeId })
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
 
