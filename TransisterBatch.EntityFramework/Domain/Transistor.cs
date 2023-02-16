@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Xml.Linq;
 using TransisterBatch.EntityFramework.Extensions;
 
@@ -57,6 +58,9 @@ namespace TransisterBatch.EntityFramework.Domain
 
         public List<TransistorGroup> Process(TransistorGroupLoadArgs args)
         {
+            List<TransistorGroup> groups = new List<TransistorGroup>();
+            // This will need to be revisited as I cant come up with a nice solution 
+            //  using group by to set the max group counts
             List<TransistorGroup> batches = this
                 .GroupBy(ts => ts, new TransistorEqualityComparer
                 {
@@ -64,14 +68,32 @@ namespace TransisterBatch.EntityFramework.Domain
                     HefTolerance = args.HefTolerance
                 })
                 .Select(grp => new TransistorGroup(grp.ToList()))
+                .ToList();
+
+            foreach(TransistorGroup batch in batches)
+            {
+                if(batch.Count > args.GroupSize)
+                {
+                    groups.AddRange(batch
+                        .Select((value, index) => new { Value = value, Index = index })
+                        .GroupBy(i => i.Index / args.GroupSize, v => v.Value)
+                        .Select(grp => new TransistorGroup(grp.ToList()))
+                        .ToList());
+                }
+                else
+                {
+                    groups.Add(batch);
+                }
+            }
+            return groups
                 .OrderByDescending(grp => grp.Count)
                 .ToList();
-            return batches;
         }
     }
 
     public class TransistorGroupLoadArgs
     {
+        public int GroupSize { get; set; } = 2;
         public double BetaTolerance { get; set; } = 0.001;
         public int HefTolerance { get; set; } = 0;
     }

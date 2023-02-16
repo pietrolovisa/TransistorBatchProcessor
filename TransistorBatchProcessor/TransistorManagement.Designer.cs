@@ -40,7 +40,7 @@
             this.transistorCtrl1.Location = new System.Drawing.Point(558, 66);
             this.transistorCtrl1.Name = "transistorCtrl1";
             this.transistorCtrl1.Size = new System.Drawing.Size(268, 148);
-            this.transistorCtrl1.TabIndex = 9;
+            this.transistorCtrl1.TabIndex = 2;
             // 
             // listView1
             // 
@@ -50,6 +50,7 @@
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(525, 395);
             this.listView1.TabIndex = 8;
+            this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // comboBoxBatches
@@ -59,7 +60,7 @@
             this.comboBoxBatches.Location = new System.Drawing.Point(15, 17);
             this.comboBoxBatches.Name = "comboBoxBatches";
             this.comboBoxBatches.Size = new System.Drawing.Size(274, 28);
-            this.comboBoxBatches.TabIndex = 7;
+            this.comboBoxBatches.TabIndex = 0;
             // 
             // comboBoxState
             // 
@@ -67,7 +68,7 @@
             this.comboBoxState.Location = new System.Drawing.Point(295, 17);
             this.comboBoxState.Name = "comboBoxState";
             this.comboBoxState.Size = new System.Drawing.Size(245, 28);
-            this.comboBoxState.TabIndex = 12;
+            this.comboBoxState.TabIndex = 1;
             // 
             // commandAndControl1
             // 
@@ -76,7 +77,7 @@
             this.commandAndControl1.Location = new System.Drawing.Point(661, 203);
             this.commandAndControl1.Name = "commandAndControl1";
             this.commandAndControl1.Size = new System.Drawing.Size(165, 254);
-            this.commandAndControl1.TabIndex = 15;
+            this.commandAndControl1.TabIndex = 3;
             // 
             // TransistorManagement
             // 

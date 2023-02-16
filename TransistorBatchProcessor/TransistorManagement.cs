@@ -11,6 +11,7 @@ using System.Windows.Forms.VisualStyles;
 using TransisterBatch.EntityFramework.Domain;
 using TransisterBatch.EntityFramework.Repository;
 using TransistorBatchProcessor.Extensions;
+using static OfficeOpenXml.ExcelErrorValue;
 using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -223,17 +224,17 @@ namespace TransistorBatchProcessor
                     else
                     {
                         transistorCtrl1.Toggle(true);
-                        long next = _transistorRepository.FindByBatchId(ActiveBatch.Id)
-                            .GetAwaiter()
-                            .GetResult()
-                            .DefaultIfEmpty(new Transistor { Id = 0 })
-                            .Max(t => t.Idx) + 1;
+                        //long next = _transistorRepository.FindByBatchId(ActiveBatch.Id)
+                        //    .GetAwaiter()
+                        //    .GetResult()
+                        //    .DefaultIfEmpty(new Transistor { Id = 0 })
+                        //    .Max(t => t.Idx) + 1;
                         transistorCtrl1.EntityInfo = new EntityWrapper<Transistor>
                         {
                             State = EditState.New,
                             Entity = new Transistor
                             {
-                                Idx = next
+                                Idx = GetNextTransistorId()
                             }
                         };
                         Command commands = Command.Add;
@@ -245,6 +246,21 @@ namespace TransistorBatchProcessor
                     }
                 }
             }
+        }
+
+        private long GetNextTransistorId()
+        {
+            List<long> ids = _transistorRepository.FindByBatchId(ActiveBatch.Id)
+                .GetAwaiter()
+                .GetResult()
+                .DefaultIfEmpty(new Transistor { Id = 0 })
+                .Select(t => t.Idx)
+                .ToList();
+            long max = ids.Max();
+            List<long> fullRange = new List<long>(Enumerable.Range(1, (int)max).Select(e => (long)e));
+            List<long> missing = fullRange.Except(ids).ToList();
+            long next = missing.Count == 0 ? max + 1 : missing.Min();
+            return next;
         }
 
         private void ResetState()

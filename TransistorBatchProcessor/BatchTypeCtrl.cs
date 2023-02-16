@@ -30,11 +30,13 @@ namespace TransistorBatchProcessor
         {
             Dock = DockStyle.Top,
             Caption = "Name",
+            TabIndex = 0
         };
         private TextEditor DescTextEditor = new TextEditor
         {
             Dock = DockStyle.Top,
-            Caption = "Description"
+            Caption = "Description",
+            TabIndex = 1
         };
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

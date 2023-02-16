@@ -32,17 +32,20 @@ namespace TransistorBatchProcessor
         {
             Dock = DockStyle.Top,
             Caption = "Id",
-            IsReadonly = true
+            IsReadonly = true,
+            TabStop = false
         };
         private TextEditor HFETextEditor = new TextEditor
         {
             Dock = DockStyle.Top,
-            Caption = "HFE"
+            Caption = "HFE",
+            TabIndex = 0
         };
         private TextEditor BetaTextEditor = new TextEditor
         {
             Dock = DockStyle.Top,
-            Caption = "Beta"
+            Caption = "Beta",
+            TabIndex = 1
         };
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

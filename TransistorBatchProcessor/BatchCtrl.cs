@@ -32,11 +32,13 @@ namespace TransistorBatchProcessor
         {
             Dock = DockStyle.Top,
             Caption = "Name",
+            TabIndex = 0
         };
         private ComboEditor TypeComboEditor = new ComboEditor
         {
             Dock = DockStyle.Top,
-            Caption = "Type"
+            Caption = "Type",
+            TabIndex = 1
         };
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

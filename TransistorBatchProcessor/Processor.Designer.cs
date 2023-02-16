@@ -38,8 +38,11 @@
             this.labelShowMatchDetails = new System.Windows.Forms.Label();
             this.labelListDetails = new System.Windows.Forms.Label();
             this.commandAndControl1 = new TransistorBatchProcessor.CommandAndControl();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDownGroupSize = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHefTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBetaTolerance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGroupSize)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxBatches
@@ -55,23 +58,24 @@
             // 
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.listView1.Location = new System.Drawing.Point(35, 101);
+            this.listView1.Location = new System.Drawing.Point(35, 60);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(525, 454);
+            this.listView1.Size = new System.Drawing.Size(525, 495);
             this.listView1.TabIndex = 9;
+            this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // numericUpDownHefTolerance
             // 
-            this.numericUpDownHefTolerance.Location = new System.Drawing.Point(148, 58);
+            this.numericUpDownHefTolerance.Location = new System.Drawing.Point(690, 67);
             this.numericUpDownHefTolerance.Name = "numericUpDownHefTolerance";
-            this.numericUpDownHefTolerance.Size = new System.Drawing.Size(77, 27);
-            this.numericUpDownHefTolerance.TabIndex = 15;
+            this.numericUpDownHefTolerance.Size = new System.Drawing.Size(68, 27);
+            this.numericUpDownHefTolerance.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 60);
+            this.label1.Location = new System.Drawing.Point(571, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 20);
             this.label1.TabIndex = 14;
@@ -85,10 +89,10 @@
             0,
             0,
             196608});
-            this.numericUpDownBetaTolerance.Location = new System.Drawing.Point(359, 60);
+            this.numericUpDownBetaTolerance.Location = new System.Drawing.Point(690, 102);
             this.numericUpDownBetaTolerance.Name = "numericUpDownBetaTolerance";
-            this.numericUpDownBetaTolerance.Size = new System.Drawing.Size(77, 27);
-            this.numericUpDownBetaTolerance.TabIndex = 13;
+            this.numericUpDownBetaTolerance.Size = new System.Drawing.Size(69, 27);
+            this.numericUpDownBetaTolerance.TabIndex = 1;
             this.numericUpDownBetaTolerance.Value = new decimal(new int[] {
             1,
             0,
@@ -98,7 +102,7 @@
             // labelBetaTolerance
             // 
             this.labelBetaTolerance.AutoSize = true;
-            this.labelBetaTolerance.Location = new System.Drawing.Point(246, 62);
+            this.labelBetaTolerance.Location = new System.Drawing.Point(571, 104);
             this.labelBetaTolerance.Name = "labelBetaTolerance";
             this.labelBetaTolerance.Size = new System.Drawing.Size(107, 20);
             this.labelBetaTolerance.TabIndex = 12;
@@ -108,17 +112,18 @@
             // 
             this.listView2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.listView2.Location = new System.Drawing.Point(768, 101);
+            this.listView2.Location = new System.Drawing.Point(768, 60);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(542, 454);
+            this.listView2.Size = new System.Drawing.Size(542, 495);
             this.listView2.TabIndex = 17;
+            this.listView2.TabStop = false;
             this.listView2.UseCompatibleStateImageBehavior = false;
             // 
             // labelShowMatchDetails
             // 
-            this.labelShowMatchDetails.Location = new System.Drawing.Point(575, 263);
+            this.labelShowMatchDetails.Location = new System.Drawing.Point(571, 325);
             this.labelShowMatchDetails.Name = "labelShowMatchDetails";
-            this.labelShowMatchDetails.Size = new System.Drawing.Size(180, 292);
+            this.labelShowMatchDetails.Size = new System.Drawing.Size(187, 230);
             this.labelShowMatchDetails.TabIndex = 19;
             this.labelShowMatchDetails.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
@@ -133,15 +138,43 @@
             // 
             // commandAndControl1
             // 
-            this.commandAndControl1.Location = new System.Drawing.Point(571, 101);
+            this.commandAndControl1.Location = new System.Drawing.Point(571, 167);
             this.commandAndControl1.Name = "commandAndControl1";
             this.commandAndControl1.Size = new System.Drawing.Size(188, 141);
-            this.commandAndControl1.TabIndex = 21;
+            this.commandAndControl1.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(571, 137);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(113, 20);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "Max Group Size";
+            // 
+            // numericUpDownGroupSize
+            // 
+            this.numericUpDownGroupSize.Location = new System.Drawing.Point(690, 135);
+            this.numericUpDownGroupSize.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownGroupSize.Name = "numericUpDownGroupSize";
+            this.numericUpDownGroupSize.Size = new System.Drawing.Size(69, 27);
+            this.numericUpDownGroupSize.TabIndex = 2;
+            this.numericUpDownGroupSize.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
             // Processor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.numericUpDownGroupSize);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.commandAndControl1);
             this.Controls.Add(this.labelListDetails);
             this.Controls.Add(this.labelShowMatchDetails);
@@ -156,6 +189,7 @@
             this.Size = new System.Drawing.Size(1343, 577);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHefTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBetaTolerance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGroupSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,5 +206,7 @@
         private Label labelShowMatchDetails;
         private Label labelListDetails;
         private CommandAndControl commandAndControl1;
+        private Label label2;
+        private NumericUpDown numericUpDownGroupSize;
     }
 }

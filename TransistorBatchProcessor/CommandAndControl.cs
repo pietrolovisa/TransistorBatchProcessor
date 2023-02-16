@@ -19,32 +19,38 @@ namespace TransistorBatchProcessor
         private CommandButton AddButton = new CommandButton
         {
             Dock = DockStyle.Top,
-            Command = Command.Add
+            Command = Command.Add,
+            TabIndex = 0
         };
         private CommandButton UpdateButton = new CommandButton
         {
             Dock = DockStyle.Top,
-            Command = Command.Update
+            Command = Command.Update,
+            TabIndex = 1
         };
         private CommandButton RemoveButton = new CommandButton
         {
             Dock = DockStyle.Top,
-            Command = Command.Remove
+            Command = Command.Remove,
+            TabIndex = 2
         };
         private CommandButton RestoreButton = new CommandButton
         {
             Dock = DockStyle.Top,
-            Command = Command.Restore
+            Command = Command.Restore,
+            TabIndex = 3
         };
         private CommandButton RestoreAllButton = new CommandButton
         {
             Dock = DockStyle.Top,
-            Command = Command.RestoreAll
+            Command = Command.RestoreAll,
+            TabIndex = 4
         };
         private CommandButton ProcessButton = new CommandButton
         {
             Dock = DockStyle.Top,
-            Command = Command.Process
+            Command = Command.Process,
+            TabIndex = 5
         };
 
         public event EventHandler<CommandArgs> OnCommand;

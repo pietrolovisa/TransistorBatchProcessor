@@ -41,6 +41,7 @@
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(525, 443);
             this.listView1.TabIndex = 5;
+            this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // batchTypeCtrl1
@@ -48,7 +49,7 @@
             this.batchTypeCtrl1.Location = new System.Drawing.Point(558, 19);
             this.batchTypeCtrl1.Name = "batchTypeCtrl1";
             this.batchTypeCtrl1.Size = new System.Drawing.Size(268, 112);
-            this.batchTypeCtrl1.TabIndex = 9;
+            this.batchTypeCtrl1.TabIndex = 0;
             // 
             // commandAndControl1
             // 
@@ -57,7 +58,7 @@
             this.commandAndControl1.Location = new System.Drawing.Point(661, 122);
             this.commandAndControl1.Name = "commandAndControl1";
             this.commandAndControl1.Size = new System.Drawing.Size(165, 340);
-            this.commandAndControl1.TabIndex = 10;
+            this.commandAndControl1.TabIndex = 1;
             // 
             // BatchTypeManagement
             // 

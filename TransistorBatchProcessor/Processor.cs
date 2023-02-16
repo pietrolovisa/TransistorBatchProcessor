@@ -144,7 +144,8 @@ namespace TransistorBatchProcessor
             TransistorGroupLoadArgs args = new TransistorGroupLoadArgs
             {
                 BetaTolerance = (double)numericUpDownBetaTolerance.Value,
-                HefTolerance = (int)numericUpDownHefTolerance.Value
+                HefTolerance = (int)numericUpDownHefTolerance.Value,
+                GroupSize = (int)numericUpDownGroupSize.Value
             };
 
             List<Transistor> transistors = _transistorRepository.FindByBatchIdAndUnmatched(ActiveBatch.Id).GetAwaiter().GetResult();

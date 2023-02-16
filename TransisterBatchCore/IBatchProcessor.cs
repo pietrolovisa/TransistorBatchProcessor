@@ -29,7 +29,7 @@ namespace TransisterBatchCore
                 List<TransistorGroup> batches = result.Data.Discovery.Process(groupLoadArgs);
                 result.Data.Matches = batches
                     .Where(b => b.Count > 1)
-                    .OrderBy(b => b[0].Idx)
+                    //.OrderBy(b => b[0].Idx)
                     .ToList();
                 result.Data.Outliers = batches
                     .Where(b => b.Count == 1)
