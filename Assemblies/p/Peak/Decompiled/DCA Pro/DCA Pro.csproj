@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Data\Source\Pietro\TransistorBatchProcessor\Assemblies\p\Peak\DCA Pro.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F67246C2-DD08-4E31-9EFA-9710C94E0319}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>DCA Pro</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>1.1.16.2446</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="ZedGraph">
+      <HintPath>lib\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Win32.cs" />
+    <Compile Include="DCAProApp\dialogChangeText.cs" />
+    <Compile Include="DCAProApp\UpdatePromptBox.cs" />
+    <Compile Include="DCAProApp\frmSplash.cs" />
+    <Compile Include="DCAProApp\Display.cs" />
+    <Compile Include="DCAProApp\GraphPanel.cs" />
+    <Compile Include="DCAProApp\RoundedRectangle.cs" />
+    <Compile Include="DCAProApp\RichTextBoxExtensions.cs" />
+    <Compile Include="DCAProApp\MyPanel.cs" />
+    <Compile Include="DCAProApp\ComboBoxCustom.cs" />
+    <Compile Include="DCAProApp\ComboBoxItem.cs" />
+    <Compile Include="DCAProApp\AboutBox.cs" />
+    <Compile Include="DCAProApp\cDCAProApp.cs" />
+    <Compile Include="DCAProApp\DLUpdateBox.cs" />
+    <Compile Include="DCAProApp\dialogRenameGraph.cs" />
+    <Compile Include="DCAProApp\frmDCAProApp.cs" />
+    <Compile Include="DCAProApp\dialogLCDContrast.cs" />
+    <Compile Include="DCAProApp\Graph.cs" />
+    <Compile Include="DCAProApp\GraphIcVce.cs" />
+    <Compile Include="DCAProApp\GraphHfeVce.cs" />
+    <Compile Include="DCAProApp\GraphHfeIc.cs" />
+    <Compile Include="DCAProApp\GraphIcIb.cs" />
+    <Compile Include="DCAProApp\GraphIcVbe.cs" />
+    <Compile Include="DCAProApp\GraphIdVds.cs" />
+    <Compile Include="DCAProApp\GraphIdVgs.cs" />
+    <Compile Include="DCAProApp\GraphTIcVce.cs" />
+    <Compile Include="DCAProApp\GraphTIcVge.cs" />
+    <Compile Include="DCAProApp\GraphJIdVds.cs" />
+    <Compile Include="DCAProApp\GraphJIdVgs.cs" />
+    <Compile Include="DCAProApp\GraphVRegVoVi.cs" />
+    <Compile Include="DCAProApp\GraphPNJunction.cs" />
+    <Compile Include="DCAProApp\Properties\Settings.cs" />
+    <Compile Include="DCAProApp\Properties\Resources.cs" />
+    <Compile Include="DCAPro\Hid.cs" />
+    <Compile Include="DCAPro\DeviceManagement.cs" />
+    <Compile Include="DCAPro\WinUsbDevice.cs" />
+    <Compile Include="DCAPro\ACT.cs" />
+    <Compile Include="DCAPro\WorkResult.cs" />
+    <Compile Include="DCAPro\CORE.cs" />
+    <Compile Include="DCAPro\CMD.cs" />
+    <Compile Include="DCAPro\Errors.cs" />
+    <Compile Include="DCAPro\Test.cs" />
+    <Compile Include="DCAPro\stROMCalDataValues.cs" />
+    <Compile Include="DCAPro\stROMCalDataUInt32s.cs" />
+    <Compile Include="DCAPro\stROMCalData.cs" />
+    <Compile Include="DCAPro\stROMSerial.cs" />
+    <Compile Include="DCAPro\DCAProUnit.cs" />
+    <Compile Include="DCAPro\FileIO.cs" />
+    <Compile Include="DCAPro\Tests.cs" />
+    <Compile Include="DCAPro\Boot.cs" />
+    <Compile Include="DCAPro\Comms.cs" />
+    <Compile Include="AlphaForms\AlphaForm.cs" />
+    <Compile Include="AlphaForms\LayeredWindow.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DCAProApp\AboutBox.resx" />
+    <EmbeddedResource Include="DCAProApp\dialogChangeText.resx" />
+    <EmbeddedResource Include="DCAProApp\dialogLCDContrast.resx" />
+    <EmbeddedResource Include="DCAProApp\dialogRenameGraph.resx" />
+    <EmbeddedResource Include="DCAProApp\DLUpdateBox.resx" />
+    <EmbeddedResource Include="DCAProApp\frmDCAProApp.resx" />
+    <EmbeddedResource Include="DCAProApp\frmSplash.resx" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_BICOL2.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_BICOL3CA.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_BICOL3CC.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DIODE.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DMFETN.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DMFETP.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DMIGBTN.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DMIGBTND.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DMIGBTP.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_DMIGBTPD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_IGBTN.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_IGBTND.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_IGBTP.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_IGBTPD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_JFETN.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_JFETNG.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_JFETP.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_JFETPG.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_LED.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_MFETN.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_MFETP.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPN.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPND.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPNDARL.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPNDARLD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPNDARLR.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPNDARLRD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_NPNDIG.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNP.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNPD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNPDARL.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNPDARLD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNPDARLR.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNPDARLRD.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_PNPDIG.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_SCR.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_TRIAC.bmp" />
+    <EmbeddedResource Include="DCAProApp\Images\pict_ZENER.bmp" />
+    <EmbeddedResource Include="DCAProApp\Properties\Resources.resx" />
+    <EmbeddedResource Include="DCAProApp\UpdatePromptBox.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
