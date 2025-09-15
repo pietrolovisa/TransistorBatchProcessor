@@ -22,6 +22,7 @@ namespace TransistorBatchProcessor
         private readonly IBatchTypeRepository _batchTypeRepository;
         private readonly IBatchRepository _batchRepository;
         private readonly ITransistorRepository _transistorRepository;
+        private readonly UsbMonitorWorker _usbMonitorWorker;
 
         private TabControl TabCtrl { get; set; }
 
@@ -30,13 +31,15 @@ namespace TransistorBatchProcessor
         public TransistorBatchForm(
             IBatchTypeRepository batchTypeRepository,
             IBatchRepository batchRepository,
-            ITransistorRepository transistorRepository)
+            ITransistorRepository transistorRepository,
+            UsbMonitorWorker usbMonitorWorker)
         {
             _batchTypeRepository = batchTypeRepository;
             _batchRepository = batchRepository;
             _transistorRepository = transistorRepository;
+            _usbMonitorWorker = usbMonitorWorker;
 
-            ManagementTools = new List<IManagementTool>();
+            ManagementTools = [];
 
             //Processor processor = new Processor(_batchRepository, _batchTypeRepository, _transistorRepository)
             //{
@@ -101,11 +104,17 @@ namespace TransistorBatchProcessor
                 }
                 Controls.Add(TabCtrl);
                 UpdateHeader();
+                StartUsbMonitorWorkerAsync();
             }
             finally
             {
                 SupressEvents = false;
             }
+        }
+
+        private async void StartUsbMonitorWorkerAsync()
+        {
+            await _usbMonitorWorker.StartAsync(CancellationToken.None);
         }
     }
 }
